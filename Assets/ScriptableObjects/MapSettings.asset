@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b5ad3183b26412783ef7cf3cceb6f6, type: 3}
+  m_Name: MapSettings
+  m_EditorClassIdentifier: 
+  gridXSize: 20
+  gridYSize: 20
+  groundTile: {fileID: 5880414410338720071, guid: b13c99cb20ce44b94b3b18ec64805fd2, type: 3}
