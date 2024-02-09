@@ -1,18 +1,42 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using EventHandler;
 using UnityEngine;
-
-public class MapGenerateManager : MonoBehaviour
+using UnityEngine.Serialization;
+using MAP = Configs.MapConfig;
+public class MapGenerateManager : Singleton<MapGenerateManager>
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private MAP mapConfig; 
+    [SerializeField] private Transform gridParent;
+    private Grid generatedGrid;
+    public Grid GeneratedGrid {
+        get
+        {
+            return generatedGrid;
+        }
+    }
+    protected override void Awake()
     {
-        
+        base.Awake();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Initialize()
     {
-        
+        GenerateGrid();
+    }
+    public void GenerateGrid()
+    {
+        int row = mapConfig.GridXSize;
+        int column = mapConfig.GridYSize;
+        generatedGrid = new Grid(row, column);
+        InputHandler.Instance.SetEdges(GeneratedGrid);
+        for (int i = 0; i < row; i++)
+        {
+            for (int j = 0; j < column; j++)
+            {
+                Instantiate(mapConfig.GroundTile.gameObject, new Vector2(i,j),Quaternion.identity, gridParent);
+            }
+        }
     }
 }

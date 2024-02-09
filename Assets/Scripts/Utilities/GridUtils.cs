@@ -2,7 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class GridUtils
+namespace Utilities
 {
-    
+    public static class GridUtils
+    {
+   
+    }
 }
+

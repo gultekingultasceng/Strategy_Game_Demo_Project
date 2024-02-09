@@ -10,6 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f20dd59ae040c4f17a0b51860a32f974, type: 3}
-  m_Name: BuildingConfig
+  m_Name: BarrackConfig
   m_EditorClassIdentifier: 
   Health: 100
+  Icon: {fileID: 21300000, guid: 7ceda45be0bf34a918054d76334b4478, type: 3}
+  Description: Soldiers can be produced from the barracks
