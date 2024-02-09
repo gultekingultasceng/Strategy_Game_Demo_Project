@@ -14,5 +14,6 @@ public class GameManager : Singleton<GameManager>
     {
         InputHandler.Instance.Initialize();
         MapGenerateManager.Instance.Initialize();
+        GameplayManager.Instance.Initialize();
     }
 }

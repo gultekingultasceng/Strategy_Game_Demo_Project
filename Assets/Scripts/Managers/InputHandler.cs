@@ -11,17 +11,16 @@ public class InputHandler : Singleton<InputHandler>
     private Vector2 mousepos;
     private bool isOnUI = false;
     private bool isOnGrid = false;
-    public Publisher<Vector2>OnLeftMouseButtonClick, OnRightMouseButtonClick;
-    private Vector2Int XEdge, YEdge; // we can get these values from MapGenerateManager (row,column)
-                                    // but this way more suitable for various situation
+    public EventThrower<Vector2Int>OnLeftMouseButtonClick, OnRightMouseButtonClick;
+    private Vector2Int XEdge, YEdge;
     protected override void Awake()
     {
         base.Awake();
     }
     public void Initialize()
     {
-        OnLeftMouseButtonClick = new Publisher<Vector2>();
-        OnRightMouseButtonClick = new Publisher<Vector2>();
+        OnLeftMouseButtonClick = new EventThrower<Vector2Int>();
+        OnRightMouseButtonClick = new EventThrower<Vector2Int>();
     }
 
     public void SetEdges(Grid grid)
@@ -45,11 +44,11 @@ public class InputHandler : Singleton<InputHandler>
     {
         if (isLeftMouseButtonClicked())
         {
-            OnLeftMouseButtonClick.Publish(VectorUtils.GetVector2Int(mousepos));
+            OnLeftMouseButtonClick.Throw(VectorUtils.GetVector2Int(mousepos));
         }
         if (isRightMouseButtonClicked())
         {
-            OnRightMouseButtonClick.Publish(VectorUtils.GetVector2Int(mousepos));
+            OnRightMouseButtonClick.Throw(VectorUtils.GetVector2Int(mousepos));
         }
     }
     public bool isLeftMouseButtonClicked()

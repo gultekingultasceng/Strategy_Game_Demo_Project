@@ -26,5 +26,12 @@ public class Grid
         this.rowCount = rowCount;
         this.columnCount = columnCount;
         cells = new Cell[rowCount, columnCount];
+        for (int i = 0; i < rowCount; i++)
+        {
+            for (int j = 0; j < columnCount; j++)
+            {
+                cells[i, j] = new Cell(true, rowCount, this.columnCount);
+            }
+        }
     }
 }
