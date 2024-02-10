@@ -1,17 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
+using EventHandler;
 using UnityEngine;
 
 public class ProductionUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private UnitCreateButton unitCreateButtonPrefab;
+    [SerializeField] private Unit[] produceableUnitList;
+    [SerializeField] private Transform contentProductsParent;
+ 
 
-    // Update is called once per frame
-    void Update()
+    [SerializeField] private Sprite PlacementIndicator;
+
+    public void Initialize()
+    {
+        FillProductsMenu();
+    }
+    private void FillProductsMenu()
+    {
+        for (int i = 0; i < produceableUnitList.Length; i++)
+        {
+            UnitCreateButton button = Instantiate(unitCreateButtonPrefab, contentProductsParent);
+            button.SetTheCreateButton(produceableUnitList[i]);
+        }
+    }
+    private void OpenPlacementIndicator()
     {
         
     }

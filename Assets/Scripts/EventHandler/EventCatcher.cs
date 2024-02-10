@@ -9,12 +9,12 @@ namespace EventHandler
     {
         public static void Catch(EventThrower<T> thrower, Action<T> connectedFunc)
         {
-            thrower.myaction += connectedFunc;
+            thrower.MyAction += connectedFunc;
         }
 
         public static void ReleaseEvent(EventThrower<T> thrower, Action<T> connectedFunc)
         {
-            thrower.myaction -= connectedFunc;
+            thrower.MyAction -= connectedFunc;
         }
     }
 }

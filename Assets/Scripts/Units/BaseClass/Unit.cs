@@ -5,14 +5,14 @@ using Configs;
 using UnityEngine;
 public class Unit : MonoBehaviour
 {
-    [SerializeField]public UnitConfig _UnitConfig;
+    [SerializeField] public UnitConfig _UnitConfig;
     private UnitUISettings unitUISettings;
     
     public UnitUISettings _UnitUISettings
     {
         get
         {
-            return unitUISettings;
+            return unitUISettings != null ? unitUISettings : GetComponent<UnitUISettings>();
         }
     }
 

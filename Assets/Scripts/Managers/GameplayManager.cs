@@ -9,10 +9,18 @@ public class GameplayManager : Singleton<GameplayManager>
     {
         base.Awake();
     }
+    
+    
     public void Initialize()
     {
         EventCatcher<Vector2Int>.Catch(InputHandler.Instance.OnLeftMouseButtonClick , LeftMouseClicked);
         EventCatcher<Vector2Int>.Catch(InputHandler.Instance.OnRightMouseButtonClick , RightMouseClicked);
+        UnitCreateButton.onclick += Clicked;
+    }
+
+    void Clicked(Unit unit)
+    {
+        Debug.Log(unit._UnitUISettings.UnitTitle);
     }
     private void LeftMouseClicked(Vector2Int coordinate)
     {

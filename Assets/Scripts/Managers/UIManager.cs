@@ -14,6 +14,6 @@ public class UIManager : Singleton<UIManager>
 
     public void Initialize()
     {
-        
+        productionUI.Initialize();
     }
 }
