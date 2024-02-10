@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitIcon: {fileID: 21300000, guid: 7ceda45be0bf34a918054d76334b4478, type: 3}
-  spriteRenderer: {fileID: 0}
   unitDescription: Barracks can produce soldiers
+  unitTitle: Barrack
 --- !u!114 &4720891324373824213
 MonoBehaviour:
   m_ObjectHideFlags: 0

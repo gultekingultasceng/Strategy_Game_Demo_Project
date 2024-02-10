@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitIcon: {fileID: 21300000, guid: 44af366dd2a1444c896ae70d88768c86, type: 3}
-  spriteRenderer: {fileID: 0}
-  unitDescription: Soldier_1
+  unitDescription: Corporal
+  unitTitle: Soldier_1
 --- !u!114 &1398722283920321909
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -33,6 +33,14 @@ public class UnitUISettings : MonoBehaviour
             return unitDescription;
         }
     }
+    [SerializeField] private string unitTitle;
+    public string UnitTitle
+    {
+        get
+        {
+            return unitTitle;
+        }
+    }
     private Color damagedColor, initialColor;
     protected void Awake()
     {

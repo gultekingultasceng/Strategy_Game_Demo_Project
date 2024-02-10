@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitIcon: {fileID: 21300000, guid: 4f7dc5fc8255a4a9aaa3e5437e0e10a2, type: 3}
-  spriteRenderer: {fileID: 0}
   unitDescription: Power plant is required for produce units
+  unitTitle: Power Plant
 --- !u!114 &6323607428889015744
 MonoBehaviour:
   m_ObjectHideFlags: 0
