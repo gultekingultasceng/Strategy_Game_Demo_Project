@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using Configs;
 using UnityEngine;
+using Utilities;
+
+[RequireComponent(typeof(UnitUISettings))]
 public class Unit : MonoBehaviour
 {
     [SerializeField] public UnitConfig _UnitConfig;
@@ -12,12 +15,21 @@ public class Unit : MonoBehaviour
     {
         get
         {
-            return unitUISettings != null ? unitUISettings : GetComponent<UnitUISettings>();
+            if (unitUISettings != null)
+            {
+                return unitUISettings;
+            }
+            else
+            {
+                unitUISettings = GetComponent<UnitUISettings>();
+                return unitUISettings;
+            }
+            
         }
     }
-
+    
     [SerializeField] protected int width; // Set these manually from inspector to make it more suitable for various situations
-                                        // But we can set it with Sprite resolution divided by pixel per unit Count (cell size)
+                                         // But we can set it with Sprite resolution divided by pixel per unit Count (cell size)
     public int Width 
     {
         get
@@ -47,9 +59,7 @@ public class Unit : MonoBehaviour
             return currentHealth;
         }
     }
-
     protected Vector2Int myPosition;
-
     public Vector2Int MyPosition
     {
         get
@@ -62,11 +72,12 @@ public class Unit : MonoBehaviour
             MoveToPosition(myPosition);
         }
     }
-    protected void Awake()
+    
+    private void Awake()
     {
-        initialHealth = _UnitConfig.Health;
-        currentHealth = initialHealth;     // Get initial health from config
+        unitUISettings = GetComponent<UnitUISettings>();
     }
+
     private void MoveToPosition(Vector2Int coordinate)
     {
         transform.position = new Vector3(coordinate.x, coordinate.y, 0f);

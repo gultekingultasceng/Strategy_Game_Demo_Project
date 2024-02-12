@@ -8,10 +8,6 @@ public class ProductionUI : MonoBehaviour
     [SerializeField] private UnitCreateButton unitCreateButtonPrefab;
     [SerializeField] private Unit[] produceableUnitList;
     [SerializeField] private Transform contentProductsParent;
- 
-
-    [SerializeField] private Sprite PlacementIndicator;
-
     public void Initialize()
     {
         FillProductsMenu();
@@ -23,9 +19,5 @@ public class ProductionUI : MonoBehaviour
             UnitCreateButton button = Instantiate(unitCreateButtonPrefab, contentProductsParent);
             button.SetTheCreateButton(produceableUnitList[i]);
         }
-    }
-    private void OpenPlacementIndicator()
-    {
-        
     }
 }

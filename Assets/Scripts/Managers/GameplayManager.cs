@@ -9,25 +9,56 @@ public class GameplayManager : Singleton<GameplayManager>
     {
         base.Awake();
     }
-    
-    
-    public void Initialize()
+    [System.Serializable]
+    enum Stages
     {
-        EventCatcher<Vector2Int>.Catch(InputHandler.Instance.OnLeftMouseButtonClick , LeftMouseClicked);
-        EventCatcher<Vector2Int>.Catch(InputHandler.Instance.OnRightMouseButtonClick , RightMouseClicked);
-        UnitCreateButton.onclick += Clicked;
+        Selection,
+        Production
     }
 
-    void Clicked(Unit unit)
+    [SerializeField] private Stages stage;
+    
+    public void ProductionStage()
     {
-        Debug.Log(unit._UnitUISettings.UnitTitle);
+        stage = Stages.Production;
+    }
+    public void SelectionStage()
+    {
+        stage = Stages.Selection;
+    }
+
+    [SerializeField]private Unit lastSelectedUnit;
+    public EventThrower<Unit> OnSelectUnit;
+    public void Initialize()
+    {
+        OnSelectUnit = new EventThrower<Unit>();
+        EventCatcher<Vector2Int>.Catch(InputHandler.Instance.OnLeftMouseButtonClick , LeftMouseClicked);
+        EventCatcher<Vector2Int>.Catch(InputHandler.Instance.OnRightMouseButtonClick , RightMouseClicked);
+        EventCatcher.Catch(MapGenerateManager.Instance.OnCreateBuilding , SelectionStage);
     }
     private void LeftMouseClicked(Vector2Int coordinate)
     {
-        Debug.Log(coordinate.ToString());
+        if (stage == Stages.Selection)
+        {
+            lastSelectedUnit = MapGenerateManager.Instance.IsUnitExistOnPosition(coordinate);
+            OnSelectUnit.Throw(lastSelectedUnit);
+        }
+        else if (stage == Stages.Production)
+        {
+           MapGenerateManager.Instance.CreateBuilding();
+        }
+        else
+        {
+            Debug.Log("UNDEFINED STAGE !");
+        }
     }
     private void RightMouseClicked(Vector2Int coordinate)
     {
         Debug.Log(coordinate.ToString());
+        //  MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(coordinate).IsEmptyCell = false; // to-do: silinecek
     }
+
+
+ 
+   
 }

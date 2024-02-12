@@ -14,6 +14,11 @@ namespace Utilities
         {
             return new Vector2Int(Mathf.FloorToInt(worldpos.x), Mathf.FloorToInt(worldpos.y));
         }
+
+        public static Vector3 GetWorldPositionFromCoordinates(Vector2Int coordinates)
+        {
+            return new Vector3(coordinates.x, coordinates.y, 0f);
+        }
     }
 }
 

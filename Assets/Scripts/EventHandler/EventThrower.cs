@@ -14,5 +14,15 @@ namespace EventHandler
         }
     
     }
+
+    public class EventThrower
+    {
+        public Action MyAction;
+
+        public void Throw()
+        {
+            MyAction?.Invoke();
+        }
+    }
 }
 

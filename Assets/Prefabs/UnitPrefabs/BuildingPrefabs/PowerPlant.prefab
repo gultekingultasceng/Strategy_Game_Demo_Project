@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitIcon: {fileID: 21300000, guid: 4f7dc5fc8255a4a9aaa3e5437e0e10a2, type: 3}
-  unitDescription: Power plant is required for produce units
+  unitDescription: Power plant is simple building
   unitTitle: Power Plant
 --- !u!114 &6323607428889015744
 MonoBehaviour:
@@ -116,3 +116,4 @@ MonoBehaviour:
   _UnitConfig: {fileID: 11400000, guid: 389957aac162c4cd6bc6cc7a21952dd6, type: 2}
   width: 2
   height: 3
+  producableList: []

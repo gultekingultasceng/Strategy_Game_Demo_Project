@@ -11,8 +11,7 @@ public class UnitCreateButton : MonoBehaviour
      [SerializeField] private TextMeshProUGUI unitSizeText;
      [SerializeField] private Image unitIconImage;
      private Unit produceableUnit;
-     //private EventThrower<Unit> OnCreateUnitButtonClicked = new EventThrower<Unit>();
-     public static Action<Unit> onclick;
+     private EventThrower<Unit> OnCreateUnitButtonClicked = new EventThrower<Unit>();
      public void SetTheCreateButton(Unit unit)
      {
           produceableUnit = unit;
@@ -22,10 +21,12 @@ public class UnitCreateButton : MonoBehaviour
           unitSizeText.text = $"{produceableUnit.Width} x {produceableUnit.Height}";
           Button myButton = GetComponent<Button>();
           myButton.onClick.AddListener(UnitCreateButtonOnClick);
+          EventCatcher<Unit>.Catch(OnCreateUnitButtonClicked, UIManager.Instance.CreateUnitButtonClicked);
+          
      }
      private void UnitCreateButtonOnClick()
      {
-        // OnCreateUnitButtonClicked.Throw(produceableUnit);
-         onclick?.Invoke(produceableUnit);
+        OnCreateUnitButtonClicked.Throw(produceableUnit);
      }
+     
 }

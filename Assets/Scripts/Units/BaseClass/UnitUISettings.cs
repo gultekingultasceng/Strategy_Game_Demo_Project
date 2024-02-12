@@ -42,11 +42,13 @@ public class UnitUISettings : MonoBehaviour
         }
     }
     private Color damagedColor, initialColor;
-    protected void Awake()
+
+    public void SetDefault()
     {
         _SpriteRenderer = GetComponent<SpriteRenderer>();
         damagedColor = GameConsts.DamagedUnitColor;
         initialColor = GameConsts.UnitInitialColor;
+        _SpriteRenderer.color = initialColor;
     }
     public void GetDamageEffect()
     {

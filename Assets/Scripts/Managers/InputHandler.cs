@@ -9,6 +9,10 @@ public class InputHandler : Singleton<InputHandler>
 {
     public Camera _MainCamera;
     private Vector2 mousepos;
+    public Vector2 Mousepos
+    {
+        get => mousepos;
+    }
     private bool isOnUI = false;
     private bool isOnGrid = false;
     public EventThrower<Vector2Int>OnLeftMouseButtonClick, OnRightMouseButtonClick;
@@ -40,15 +44,19 @@ public class InputHandler : Singleton<InputHandler>
         }
     }
 
+    public Vector2Int getMouseButtonData()
+    {
+        return VectorUtils.GetVector2Int(mousepos);
+    }
     public void PublishMouseClickData()
     {
         if (isLeftMouseButtonClicked())
         {
-            OnLeftMouseButtonClick.Throw(VectorUtils.GetVector2Int(mousepos));
+            OnLeftMouseButtonClick.Throw(getMouseButtonData());
         }
         if (isRightMouseButtonClicked())
         {
-            OnRightMouseButtonClick.Throw(VectorUtils.GetVector2Int(mousepos));
+            OnRightMouseButtonClick.Throw(getMouseButtonData());
         }
     }
     public bool isLeftMouseButtonClicked()
@@ -58,7 +66,7 @@ public class InputHandler : Singleton<InputHandler>
 
     public bool isRightMouseButtonClicked()
     {
-        return Input.GetMouseButtonUp(0);
+        return Input.GetMouseButtonUp(1);
     }
     private bool isAvailableToPublishData()
     {

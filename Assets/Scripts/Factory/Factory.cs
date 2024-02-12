@@ -1,0 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public abstract class Factory<T> : MonoBehaviour
+{
+    public abstract T Create();
+}
+
+public abstract class Factory<T, TParameter1 , TParameter2 , TParameter3> : MonoBehaviour
+{
+    public abstract T Create(TParameter1 parameter1 , TParameter2 parameter2 , TParameter3 parameter3);
+}
