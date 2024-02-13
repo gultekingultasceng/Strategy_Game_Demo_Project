@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using ObjectPoolingSystem;
 using UnityEngine;
+using Utilities;
 
 [RequireComponent(typeof(SoldierUISettings))]
-public class Soldier : Unit , IEnableDisable
+public class Soldier : Unit , IEnableDisable<Vector3>
 {
     private SoldierUISettings soldierUISettings;
     
@@ -28,15 +29,18 @@ public class Soldier : Unit , IEnableDisable
     /*
 
      */
-    public void PerformOnEnable()
+
+
+    public void PerformOnEnable(Vector3 parameter1)
     {
         initialHealth = _UnitConfig.Health;
         currentHealth = initialHealth;     // Get initial health from config
         _SoldierUISettings.SetDefault();
+        MyPosition = VectorUtils.GetVector2Int(parameter1);
     }
 
-    public void PerformOnDisable()
+    public void PerformDisable()
     {
-       this.gameObject.SetActive(false);
+        this.gameObject.SetActive(false);
     }
 }

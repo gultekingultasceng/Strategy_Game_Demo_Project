@@ -37,7 +37,7 @@ namespace ObjectPoolingSystem
         void ReturnObject(T obj , TUniqueID id);
     }
 
-    public abstract class Pool<T, TUniqueID, TParameter1, TParameter2, TParameter3> : MonoBehaviour,IPool<T,TUniqueID ,TParameter1, TParameter2, TParameter3> where T : IEnableDisable
+    public abstract class Pool<T, TUniqueID, TParameter1, TParameter2, TParameter3> : MonoBehaviour,IPool<T,TUniqueID ,TParameter1, TParameter2, TParameter3> where T : IEnableDisable<TParameter2>
     {
         public abstract Factory<T , TParameter1 , TParameter2, TParameter3> Factory { get; set; }
         //private Stack<T> pool = new Stack<T>();
@@ -46,9 +46,23 @@ namespace ObjectPoolingSystem
         public T GetObject(TUniqueID uniqueID,TParameter1 param1, TParameter2 param2, TParameter3 param3)
         {
             T obj = GetTObjectWithUniqueID(uniqueID, param1, param2, param3);
+            obj.PerformOnEnable(param2);
             return obj;
         }
-
+        public void ReturnObject(T obj , TUniqueID id)
+        {
+            if (MyUniqueTypeForPool.TryGetValue(id , out List<T> objList))
+            {
+                objList.Add(obj);
+            }
+            else
+            {
+                List<T> newlist = new List<T>(); // REGISTER AS LIST
+                newlist.Add(obj);
+                MyUniqueTypeForPool.Add(id,newlist);
+            }
+            obj.PerformDisable();
+        }
         public T GetTObjectWithUniqueID(TUniqueID id , TParameter1 param1, TParameter2 param2, TParameter3 param3)
         {
             if (MyUniqueTypeForPool.TryGetValue(id , out List<T> objList) && objList.Count > 0)
@@ -63,20 +77,7 @@ namespace ObjectPoolingSystem
                 return created;
             }
         }
-        public void ReturnObject(T obj , TUniqueID id)
-        {
-           if (MyUniqueTypeForPool.TryGetValue(id , out List<T> objList))
-           {
-               objList.Add(obj);
-           }
-           else
-           {
-               List<T> newlist = new List<T>(); // REGISTER AS LIST
-               newlist.Add(obj);
-               MyUniqueTypeForPool.Add(id,newlist);
-           }
-           obj.PerformOnDisable();
-        }
+       
     }
 
 

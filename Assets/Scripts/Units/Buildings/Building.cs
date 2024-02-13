@@ -5,7 +5,7 @@ using UnityEngine;
 using Utilities;
 
 [RequireComponent(typeof(BuildingUISettings))]
-public class Building : Unit , IEnableDisable
+public class Building : Unit , IEnableDisable<Vector3>
 {
     
     private BuildingUISettings buildingUISettings;
@@ -41,18 +41,7 @@ public class Building : Unit , IEnableDisable
     /*
 
      */
-    public void PerformOnEnable()
-    {
-        initialHealth = _UnitConfig.Health;
-        currentHealth = initialHealth;     // Get initial health from config
-        _BuildingUISettings.SetDefault();
-        MyPosition = VectorUtils.GetVector2Int(transform.position);
-    }
 
-    public void PerformOnDisable()
-    {
-        this.gameObject.SetActive(false);
-    }
 
     private void Update()
     {
@@ -60,5 +49,18 @@ public class Building : Unit , IEnableDisable
         {
             DestroyMe();
         }
+    }
+
+    public void PerformOnEnable(Vector3 parameter1)
+    {
+        initialHealth = _UnitConfig.Health;
+        currentHealth = initialHealth;     // Get initial health from config
+        _BuildingUISettings.SetDefault();
+        MyPosition = VectorUtils.GetVector2Int(parameter1);
+    }
+    
+    public void PerformDisable()
+    {
+        this.gameObject.SetActive(false);
     }
 }
