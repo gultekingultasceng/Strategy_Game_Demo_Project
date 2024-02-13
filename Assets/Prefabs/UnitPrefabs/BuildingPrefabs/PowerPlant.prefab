@@ -113,6 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87c842e9d11154999b478ae39d334189, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  uniqueIDForUnitType: 1
   _UnitConfig: {fileID: 11400000, guid: 389957aac162c4cd6bc6cc7a21952dd6, type: 2}
   width: 2
   height: 3

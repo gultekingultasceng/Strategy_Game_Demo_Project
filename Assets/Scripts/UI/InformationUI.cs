@@ -13,7 +13,7 @@ public class InformationUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI descriptionText;
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private Transform productsContent;
-    [SerializeField] private GameObject produceButton;
+    [SerializeField] private SoldierCreateButton soldierCreateButtonPrefab;
     public void SetInformationUI(Unit unit)
     {
         titleText.text = unit._UnitUISettings.UnitTitle;
@@ -23,7 +23,20 @@ public class InformationUI : MonoBehaviour
         {
             if (building.ProducableList.Count > 0)
             {
-                
+                produceableProductsPanel.SetActive(true);
+                if (productsContent.transform.childCount > 0)
+                {
+                    foreach (Transform oldButtons in productsContent)
+                    {
+                        Destroy(oldButtons.gameObject);
+                    }
+                }
+             
+                for (int i = 0; i < building.ProducableList.Count; i++)
+                {
+                    SoldierCreateButton soldierCreateButton = Instantiate(soldierCreateButtonPrefab.gameObject, productsContent).GetComponent<SoldierCreateButton>();
+                    soldierCreateButton.SetTheCreateButton(building,building.ProducableList[i]);
+                }
             }
             else
             {

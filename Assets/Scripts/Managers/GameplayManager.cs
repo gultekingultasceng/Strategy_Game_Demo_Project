@@ -27,7 +27,7 @@ public class GameplayManager : Singleton<GameplayManager>
         stage = Stages.Selection;
     }
 
-    [SerializeField]private Unit lastSelectedUnit;
+    private Unit lastSelectedUnit;
     public EventThrower<Unit> OnSelectUnit;
     public void Initialize()
     {

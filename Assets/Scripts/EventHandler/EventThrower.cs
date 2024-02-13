@@ -24,5 +24,6 @@ namespace EventHandler
             MyAction?.Invoke();
         }
     }
+    
 }
 

@@ -8,6 +8,7 @@ public class ProductionUI : MonoBehaviour
     [SerializeField] private UnitCreateButton unitCreateButtonPrefab;
     [SerializeField] private Unit[] produceableUnitList;
     [SerializeField] private Transform contentProductsParent;
+    [SerializeField] private UnitCreateButtonPool unitCreateButtonPool;
     public void Initialize()
     {
         FillProductsMenu();
@@ -16,7 +17,7 @@ public class ProductionUI : MonoBehaviour
     {
         for (int i = 0; i < produceableUnitList.Length; i++)
         {
-            UnitCreateButton button = Instantiate(unitCreateButtonPrefab, contentProductsParent);
+            UnitCreateButton button = unitCreateButtonPool.GetObject(unitCreateButtonPrefab.gameObject,contentProductsParent);
             button.SetTheCreateButton(produceableUnitList[i]);
         }
     }

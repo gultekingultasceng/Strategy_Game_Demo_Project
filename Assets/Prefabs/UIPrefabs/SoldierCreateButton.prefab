@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 4629459506014904155}
   - component: {fileID: 4629459506014904156}
   - component: {fileID: 2079031533055945779}
+  - component: {fileID: -3158924504020604038}
   m_Layer: 5
   m_Name: SoldierCreateButton
   m_TagString: Untagged
@@ -198,3 +199,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-3158924504020604038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4629459506014904158}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 671f3dc131b98450ea5670aaeb5c2199, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soldierICon: {fileID: 1703737576673672781}

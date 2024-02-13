@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using ObjectPoolingSystem;
 using UnityEngine;
 
 [RequireComponent(typeof(SoldierUISettings))]
-public class Soldier : Unit
+public class Soldier : Unit , IEnableDisable
 {
     private SoldierUISettings soldierUISettings;
-
+    
     public SoldierUISettings _SoldierUISettings
     {
         get
@@ -22,10 +23,20 @@ public class Soldier : Unit
             }
         }
     }
-    public void Initialize()
+
+    
+    /*
+
+     */
+    public void PerformOnEnable()
     {
         initialHealth = _UnitConfig.Health;
         currentHealth = initialHealth;     // Get initial health from config
         _SoldierUISettings.SetDefault();
+    }
+
+    public void PerformOnDisable()
+    {
+       this.gameObject.SetActive(false);
     }
 }

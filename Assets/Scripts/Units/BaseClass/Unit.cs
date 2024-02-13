@@ -2,15 +2,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Configs;
+using EventHandler;
 using UnityEngine;
 using Utilities;
 
 [RequireComponent(typeof(UnitUISettings))]
 public class Unit : MonoBehaviour
 {
+    [SerializeField] private int uniqueIDForUnitType = -1;
+    public int UniqueIDForType
+    {
+        get => uniqueIDForUnitType;
+    }
     [SerializeField] public UnitConfig _UnitConfig;
     private UnitUISettings unitUISettings;
-    
+    public EventThrower<Unit> OnDestroy = new EventThrower<Unit>();
     public UnitUISettings _UnitUISettings
     {
         get
@@ -91,8 +97,12 @@ public class Unit : MonoBehaviour
         }
         else
         {
-            // DEAD
+            DestroyMe();
         }
     }
-    
+
+    public void DestroyMe()
+    {
+        OnDestroy.Throw(this);
+    }
 }

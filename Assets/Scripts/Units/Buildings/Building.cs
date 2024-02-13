@@ -5,8 +5,9 @@ using UnityEngine;
 using Utilities;
 
 [RequireComponent(typeof(BuildingUISettings))]
-public class Building : Unit
+public class Building : Unit , IEnableDisable
 {
+    
     private BuildingUISettings buildingUISettings;
     [SerializeField] private List<Soldier> producableList = new List<Soldier>();
 
@@ -32,11 +33,32 @@ public class Building : Unit
             }
         }
     }
-    public void Initialize()
+
+    public void CreateSoldier(Soldier targetSoldier)
+    {
+        
+    }
+    /*
+
+     */
+    public void PerformOnEnable()
     {
         initialHealth = _UnitConfig.Health;
         currentHealth = initialHealth;     // Get initial health from config
         _BuildingUISettings.SetDefault();
         MyPosition = VectorUtils.GetVector2Int(transform.position);
+    }
+
+    public void PerformOnDisable()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            DestroyMe();
+        }
     }
 }

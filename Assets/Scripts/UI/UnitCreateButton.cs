@@ -5,7 +5,7 @@ using EventHandler;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-public class UnitCreateButton : MonoBehaviour
+public class UnitCreateButton : MonoBehaviour , IEnableDisable
 {
      [SerializeField] private TextMeshProUGUI unitNameText;
      [SerializeField] private TextMeshProUGUI unitSizeText;
@@ -28,5 +28,14 @@ public class UnitCreateButton : MonoBehaviour
      {
         OnCreateUnitButtonClicked.Throw(produceableUnit);
      }
-     
+
+     public void PerformOnEnable()
+     {
+         
+     }
+
+     public void PerformOnDisable()
+     {
+        
+     }
 }
