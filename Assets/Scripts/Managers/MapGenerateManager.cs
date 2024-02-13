@@ -112,7 +112,6 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
     
     public void SetCellsEmptyForDestroyedUnitCoveredArea(Vector2Int cellPosition, int width, int height)
     {
-        Debug.LogError("girdi");
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)

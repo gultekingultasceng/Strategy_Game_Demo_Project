@@ -9,16 +9,22 @@ public class ProductionUI : MonoBehaviour
     [SerializeField] private Unit[] produceableUnitList;
     [SerializeField] private Transform contentProductsParent;
     [SerializeField] private UnitCreateButtonPool unitCreateButtonPool;
+    [SerializeField] private InfiniteScrollVertical infiniteScrollView;
     public void Initialize()
     {
         FillProductsMenu();
     }
     private void FillProductsMenu()
     {
-        for (int i = 0; i < produceableUnitList.Length; i++)
+        int ItemsCountToAddScrool = infiniteScrollView.GetRequiredItemCount();
+        for (int j = 0; j < ItemsCountToAddScrool; j++)
         {
-            UnitCreateButton button = unitCreateButtonPool.GetObject(unitCreateButtonPrefab.gameObject,contentProductsParent);
-            button.SetTheCreateButton(produceableUnitList[i]);
+            for (int i = 0; i < produceableUnitList.Length; i++)
+            {
+                UnitCreateButton button = unitCreateButtonPool.GetObject(unitCreateButtonPrefab.gameObject,contentProductsParent);
+                button.SetTheCreateButton(produceableUnitList[i]);
+            }
         }
+        infiniteScrollView.Initialize();
     }
 }

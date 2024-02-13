@@ -22,7 +22,6 @@ public class UnitCreateButton : MonoBehaviour , IEnableDisable
           Button myButton = GetComponent<Button>();
           myButton.onClick.AddListener(UnitCreateButtonOnClick);
           EventCatcher<Unit>.Catch(OnCreateUnitButtonClicked, UIManager.Instance.CreateUnitButtonClicked);
-          
      }
      private void UnitCreateButtonOnClick()
      {
@@ -33,7 +32,6 @@ public class UnitCreateButton : MonoBehaviour , IEnableDisable
      {
          
      }
-
      public void PerformOnDisable()
      {
         
