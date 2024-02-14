@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Utilities;
 
 public class Grid
 {
@@ -21,10 +22,10 @@ public class Grid
             return columnCount;
         }
     }
-
+    
     public Cell GetCellFromVector2Int(Vector2Int position)
     {
-        if (isTargetCellValid(position))
+        if (IsTargetCellValid(position))
         {
             return cells[position.x, position.y];
         }
@@ -34,28 +35,30 @@ public class Grid
         }
     }
 
-    public bool isTargetCellValid(Vector2Int coordinate)
+    public bool IsTargetCellValid(Vector2Int coordinate)
     {
         return coordinate.x >= 0 && coordinate.x <= rowCount - 1 && coordinate.y >= 0 &&
                coordinate.y <= columnCount - 1;
     }
-    public List<Cell> GetNeighbours(Cell cell)
+    
+    private void SetCellNeighbors()
     {
-        List<Cell> neighbours = new List<Cell>();
-
-        if (cell.MyRowOrder > 0)
-            neighbours.Add(cells[cell.MyRowOrder - 1, cell.MyColumnOrder]);
-
-        if (cell.MyRowOrder < rowCount - 1) 
-            neighbours.Add(cells[cell.MyRowOrder + 1, cell.MyColumnOrder]);
-            
-        if (cell.MyColumnOrder > 0) 
-            neighbours.Add(cells[cell.MyRowOrder, cell.MyColumnOrder - 1]);
-
-        if (cell.MyColumnOrder < columnCount - 1) 
-            neighbours.Add(cells[cell.MyRowOrder, cell.MyColumnOrder + 1]);
- 
-        return neighbours;
+        for (int i = 0; i < rowCount; i++)
+        {
+            for (int j = 0; j < columnCount; j++)
+            {
+                List<Cell> neighbors = new List<Cell>();
+                for (int k = 0; k < GridUtils.Dirs.Count; k++)
+                {
+                    Vector2Int neighborCoord = new Vector2Int(i, j) + GridUtils.Dirs[k];
+                    if (IsTargetCellValid(neighborCoord))
+                    {
+                        neighbors.Add(cells[neighborCoord.x , neighborCoord.y]);
+                    }
+                }
+                cells[i, j].SetNeightbors(neighbors);
+            }
+        }
     }
     public Grid(int rowCount, int columnCount)
     {
@@ -69,5 +72,6 @@ public class Grid
                 cells[i, j] = new Cell(true, i, j);
             }
         }
+        SetCellNeighbors();
     }
 }

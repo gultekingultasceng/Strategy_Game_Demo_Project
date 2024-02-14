@@ -17,7 +17,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &7672220318110677379
 Transform:
@@ -117,4 +117,4 @@ MonoBehaviour:
   _UnitConfig: {fileID: 11400000, guid: 389957aac162c4cd6bc6cc7a21952dd6, type: 2}
   width: 2
   height: 3
-  producableList: []
+  produceSoldierBehaviour: {fileID: 0}

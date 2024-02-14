@@ -54,8 +54,14 @@ public class GameplayManager : Singleton<GameplayManager>
     }
     private void RightMouseClicked(Vector2Int coordinate)
     {
-        Debug.Log(coordinate.ToString());
-        //  MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(coordinate).IsEmptyCell = false; // to-do: silinecek
+        if (lastSelectedUnit is Soldier soldier)
+        {
+            MapGenerateManager.Instance.SetCellsEmptyForDestroyedUnitCoveredArea(soldier.MyPosition , soldier.Width , soldier.Height);
+            soldier.Move(PathFinder.FindPath(
+                MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(soldier.MyPosition),
+                MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(coordinate)
+                    ));
+        }
     }
 
 

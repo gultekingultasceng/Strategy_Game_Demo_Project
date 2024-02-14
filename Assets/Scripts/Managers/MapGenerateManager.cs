@@ -46,7 +46,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
            
         }
     }
-     Vector2Int GetNearestEmptyCell(Vector2Int coordinate , int width , int height)
+     Vector2Int GetNearestEmptyCell(Vector2Int coordinate , int width , int height) // INITIAL SPAWN POINT  => coordinate
     {
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
@@ -55,26 +55,24 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
         while (queue.Count > 0)
         {
             Vector2Int currentCell = queue.Dequeue();
-            if (IsCellBuildable(currentCell , width , height))
+            if (IsCellBuildable(currentCell , width , height))  // IF coordinate IS EMPTY
             {
-               return currentCell;
+               return currentCell;                              // JUST RETURN 
             }
-            EnqueueNeighbors(currentCell, queue, visited);
+            EnqueueNeighbors(currentCell, queue, visited); // ELSE SEARCH THE CLOSEST(neighbor) CELLS
         }
         return new Vector2Int(0,0);
     }
-     void EnqueueNeighbors(Vector2Int cell, Queue<Vector2Int> queue, HashSet<Vector2Int> visited)
+     void EnqueueNeighbors(Vector2Int cell, Queue<Vector2Int> queue, HashSet<Vector2Int> visited) // Soldier Spawn point neighbors
      {
-         Vector2Int[] neighbors = {
-             new Vector2Int(cell.x + 1, cell.y),
-             new Vector2Int(cell.x - 1, cell.y),
-             new Vector2Int(cell.x, cell.y + 1),
-             new Vector2Int(cell.x, cell.y - 1)
-         };
-
+         List<Vector2Int> neighbors = new List<Vector2Int>();
+         for (int i = 0; i < GridUtils.Dirs.Count; i++)
+         {
+             neighbors.Add(cell + GridUtils.Dirs[i]);
+         }
          foreach (var neighbor in neighbors)
          {
-             if (generatedGrid.isTargetCellValid(neighbor) && !visited.Contains(neighbor))
+             if (generatedGrid.IsTargetCellValid(neighbor) && !visited.Contains(neighbor))
              {
                  queue.Enqueue(neighbor);
                  visited.Add(neighbor);
@@ -88,6 +86,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
             soldierPool.GetObject(soldier.UniqueIDForType,soldier.gameObject,VectorUtils.GetWorldPositionFromCoordinates(_targetPos) , soldierPool.transform);
         SetCellsNotEmptyForCoveredBuildArea(_targetPos , createdSoldier.Width , createdSoldier.Height);
         EventCatcher<Unit>.Catch(createdSoldier.OnDestroy , UnitDestroyed);
+        soldiersListOnGrid.Add(createdSoldier);
     }
     public void UnitDestroyed(Unit destroyedUnit)
     {

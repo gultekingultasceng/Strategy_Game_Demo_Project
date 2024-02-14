@@ -42,7 +42,10 @@ public class InformationUI : MonoBehaviour
             {
                 produceableProductsPanel.SetActive(false);
             }
-            
+        }
+        else if (unit is Soldier soldier)
+        {
+            produceableProductsPanel.SetActive(false);
         }
         
     }
