@@ -117,7 +117,4 @@ MonoBehaviour:
   _UnitConfig: {fileID: 11400000, guid: 6a663f921131c4a6e8832e6069141d83, type: 2}
   width: 4
   height: 4
-  producableList:
-  - {fileID: 1398722283920321909, guid: 39bc76d1772ab444f83130868d16018c, type: 3}
-  - {fileID: 3972384472906264944, guid: 12954ea7ba16b4b01a4e6629b5ca1578, type: 3}
-  - {fileID: 5470303211754258994, guid: 106e475f0336446fe92e45e7e3b184a8, type: 3}
+  produceSoldierBehaviour: {fileID: 11400000, guid: c92730cac5aef4d0ab629d851ae80303, type: 2}

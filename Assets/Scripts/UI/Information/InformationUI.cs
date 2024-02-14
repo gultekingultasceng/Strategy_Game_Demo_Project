@@ -21,7 +21,7 @@ public class InformationUI : MonoBehaviour
         descriptionText.text = unit._UnitUISettings.UnitDescription;
         if (unit is Building building)
         {
-            if (building.ProducableList.Count > 0)
+            if (building.CanProduceSoldier)
             {
                 produceableProductsPanel.SetActive(true);
                 if (productsContent.transform.childCount > 0)

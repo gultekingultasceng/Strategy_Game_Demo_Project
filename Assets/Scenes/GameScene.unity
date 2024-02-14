@@ -309,7 +309,7 @@ MonoBehaviour:
   mapConfig: {fileID: 11400000, guid: 9b5237907ea834e68a48d6e719409972, type: 2}
   gridParent: {fileID: 1400897108}
   buildingPool: {fileID: 1036251018}
-  soldierPool: {fileID: 0}
+  soldierPool: {fileID: 490242214}
 --- !u!4 &83569338
 Transform:
   m_ObjectHideFlags: 0
@@ -829,6 +829,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollRect: {fileID: 281676313}
   gridLayout: {fileID: 238018261}
+  scrolltype: 0
 --- !u!1 &312979556
 GameObject:
   m_ObjectHideFlags: 0
@@ -2592,7 +2593,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: -0.000061035156, y: -0.0009765625}
-  m_SizeDelta: {x: 0, y: 800}
+  m_SizeDelta: {x: 0, y: 438.61}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1510182656
 MonoBehaviour:
@@ -2741,7 +2742,7 @@ MonoBehaviour:
   m_Content: {fileID: 1510182655}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 0
+  m_MovementType: 1
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135

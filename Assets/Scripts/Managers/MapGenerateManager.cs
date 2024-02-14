@@ -41,11 +41,54 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
             createdUnit.gameObject.SetActive(true);
             buildingListOnGrid.Add(createdUnit);
             OnCreateBuilding.Throw();
+            EventCatcher<Soldier,Building,Vector2Int>.Catch(createdUnit.OnProduceSoldier, OnProduceSoldier);
             EventCatcher<Unit>.Catch(createdUnit.OnDestroy, UnitDestroyed);
            
         }
     }
-    
+     Vector2Int GetNearestEmptyCell(Vector2Int coordinate , int width , int height)
+    {
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
+        queue.Enqueue(coordinate);
+        visited.Add(coordinate);
+        while (queue.Count > 0)
+        {
+            Vector2Int currentCell = queue.Dequeue();
+            if (IsCellBuildable(currentCell , width , height))
+            {
+               return currentCell;
+            }
+            EnqueueNeighbors(currentCell, queue, visited);
+        }
+        return new Vector2Int(0,0);
+    }
+     void EnqueueNeighbors(Vector2Int cell, Queue<Vector2Int> queue, HashSet<Vector2Int> visited)
+     {
+         Vector2Int[] neighbors = {
+             new Vector2Int(cell.x + 1, cell.y),
+             new Vector2Int(cell.x - 1, cell.y),
+             new Vector2Int(cell.x, cell.y + 1),
+             new Vector2Int(cell.x, cell.y - 1)
+         };
+
+         foreach (var neighbor in neighbors)
+         {
+             if (generatedGrid.isTargetCellValid(neighbor) && !visited.Contains(neighbor))
+             {
+                 queue.Enqueue(neighbor);
+                 visited.Add(neighbor);
+             }
+         }
+     }
+    private void OnProduceSoldier(Soldier soldier , Building fromBuild , Vector2Int targetPos)
+    {
+        Vector2Int _targetPos = GetNearestEmptyCell(targetPos, soldier.Width, soldier.Height);
+        Soldier createdSoldier =
+            soldierPool.GetObject(soldier.UniqueIDForType,soldier.gameObject,VectorUtils.GetWorldPositionFromCoordinates(_targetPos) , soldierPool.transform);
+        SetCellsNotEmptyForCoveredBuildArea(_targetPos , createdSoldier.Width , createdSoldier.Height);
+        EventCatcher<Unit>.Catch(createdSoldier.OnDestroy , UnitDestroyed);
+    }
     public void UnitDestroyed(Unit destroyedUnit)
     {
         EventCatcher<Unit>.ReleaseEvent(destroyedUnit.OnDestroy , UnitDestroyed);

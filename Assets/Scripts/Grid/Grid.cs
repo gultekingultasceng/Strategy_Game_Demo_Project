@@ -24,7 +24,7 @@ public class Grid
 
     public Cell GetCellFromVector2Int(Vector2Int position)
     {
-        if (position.x >= 0 && position.x <= rowCount - 1 && position.y >= 0 && position.y <= columnCount -1)
+        if (isTargetCellValid(position))
         {
             return cells[position.x, position.y];
         }
@@ -32,6 +32,12 @@ public class Grid
         {
             return null;
         }
+    }
+
+    public bool isTargetCellValid(Vector2Int coordinate)
+    {
+        return coordinate.x >= 0 && coordinate.x <= rowCount - 1 && coordinate.y >= 0 &&
+               coordinate.y <= columnCount - 1;
     }
     public List<Cell> GetNeighbours(Cell cell)
     {

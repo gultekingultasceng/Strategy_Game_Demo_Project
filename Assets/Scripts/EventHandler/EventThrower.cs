@@ -12,7 +12,16 @@ namespace EventHandler
         {
             MyAction?.Invoke(data);
         }
-    
+    }
+
+    public class EventThrower<T, Tparameter1, Tparameter2>
+    {
+        public Action<T,Tparameter1 , Tparameter2> MyAction;
+
+        public void Throw(T t,Tparameter1 parameter1, Tparameter2 parameter2)
+        {
+            MyAction?.Invoke(t,parameter1 , parameter2);
+        }
     }
 
     public class EventThrower
