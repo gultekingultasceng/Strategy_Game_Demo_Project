@@ -28,6 +28,7 @@ public class GameplayManager : Singleton<GameplayManager>
     }
 
     private Unit lastSelectedUnit;
+    public Unit rightClickTarget;
     public EventThrower<Unit> OnSelectUnit;
     public void Initialize()
     {
@@ -56,11 +57,28 @@ public class GameplayManager : Singleton<GameplayManager>
     {
         if (lastSelectedUnit is Soldier soldier)
         {
-            MapGenerateManager.Instance.SetCellsEmptyForDestroyedUnitCoveredArea(soldier.MyPosition , soldier.Width , soldier.Height);
-            soldier.Move(PathFinder.FindPath(
-                MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(soldier.MyPosition),
-                MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(coordinate)
-                    ));
+            rightClickTarget = MapGenerateManager.Instance.IsUnitExistOnPosition(coordinate);
+            if (lastSelectedUnit == rightClickTarget) // IF TARGET AND SELECTED SAME POSITION
+            {
+                return;
+            }
+            if (rightClickTarget == null)
+            {
+                soldier.Move(PathFinder.FindPath(
+                    MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(soldier.MyPosition),
+                    MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(coordinate)
+                ) , null);
+            }
+            else
+            {
+                Vector2Int nearestEmptyCellCoordinate =
+                    MapGenerateManager.Instance.GetNearestEmptyCell(coordinate, soldier.Width, soldier.Height);
+                soldier.Move(PathFinder.FindPath(
+                    MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(soldier.MyPosition),
+                    MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(nearestEmptyCellCoordinate)
+                ) , rightClickTarget);
+            }
+           
         }
     }
 

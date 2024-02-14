@@ -35,7 +35,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
         if (placeIndicator.IsPlaceable)
         {
             Unit targetUnit = placeIndicator.SpecifiedUnit;
-            SetCellsNotEmptyForCoveredBuildArea(placeIndicator.GetLastPosition() , targetUnit.Width , targetUnit.Height);
+            SetCellsNotEmptyForCoveredUnitArea(placeIndicator.GetLastPosition() , targetUnit.Width , targetUnit.Height);
             UIManager.Instance.ClosePlacementIndicator();
             Building createdUnit = buildingPool.GetObject(targetUnit.UniqueIDForType,targetUnit.gameObject, VectorUtils.GetWorldPositionFromCoordinates(placeIndicator.GetLastPosition()), buildingPool.transform);
             createdUnit.gameObject.SetActive(true);
@@ -43,10 +43,11 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
             OnCreateBuilding.Throw();
             EventCatcher<Soldier,Building,Vector2Int>.Catch(createdUnit.OnProduceSoldier, OnProduceSoldier);
             EventCatcher<Unit>.Catch(createdUnit.OnDestroy, UnitDestroyed);
-           
         }
     }
-     Vector2Int GetNearestEmptyCell(Vector2Int coordinate , int width , int height) // INITIAL SPAWN POINT  => coordinate
+
+
+    public Vector2Int GetNearestEmptyCell(Vector2Int coordinate , int width , int height) // INITIAL SPAWN POINT  => coordinate
     {
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
         HashSet<Vector2Int> visited = new HashSet<Vector2Int>();
@@ -84,26 +85,54 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
         Vector2Int _targetPos = GetNearestEmptyCell(targetPos, soldier.Width, soldier.Height);
         Soldier createdSoldier =
             soldierPool.GetObject(soldier.UniqueIDForType,soldier.gameObject,VectorUtils.GetWorldPositionFromCoordinates(_targetPos) , soldierPool.transform);
-        SetCellsNotEmptyForCoveredBuildArea(_targetPos , createdSoldier.Width , createdSoldier.Height);
+        SetCellsNotEmptyForCoveredUnitArea(_targetPos , createdSoldier.Width , createdSoldier.Height);
+        createdSoldier.gameObject.SetActive(true);
         EventCatcher<Unit>.Catch(createdSoldier.OnDestroy , UnitDestroyed);
+        EventCatcher<Soldier>.Catch(createdSoldier.OnSoldierMovementStart , OnSoldierBeginMovement);
+        EventCatcher<Soldier>.Catch(createdSoldier.OnSoldierMovementStop , OnSoldierStopMovement);
+        EventCatcher<Soldier,Vector2Int , Action<bool>>.Catch(createdSoldier.StartMoveToNextCell ,CheckCellIsValidToMove);
         soldiersListOnGrid.Add(createdSoldier);
+    }
+    
+    private void CheckCellIsValidToMove(Soldier soldier,Vector2Int coordinate , Action<bool> onComplete)
+    {
+        Debug.Log("checking");
+        onComplete?.Invoke(generatedGrid.IsTargetCellEmpty(coordinate));
+    }
+    private void OnSoldierBeginMovement(Soldier soldier)
+    {
+        SetCellsEmpty(soldier.MyPosition, soldier.Width , soldier.Height);
+    }
+    
+    private void OnSoldierStopMovement(Soldier soldier)
+    {
+        SetCellsNotEmptyForCoveredUnitArea(soldier.MyPosition, soldier.Width , soldier.Height);
     }
     public void UnitDestroyed(Unit destroyedUnit)
     {
         EventCatcher<Unit>.ReleaseEvent(destroyedUnit.OnDestroy , UnitDestroyed);
         if (destroyedUnit is Building building)
         {
+            if (building.CanProduceSoldier)
+            {
+                EventCatcher<Soldier,Building,Vector2Int>.ReleaseEvent(building.OnProduceSoldier ,OnProduceSoldier);
+            }
             buildingPool.ReturnObject(building , building.UniqueIDForType);
+            buildingListOnGrid.Remove(building);
         }
         else if(destroyedUnit is Soldier soldier)
         {
+            EventCatcher<Soldier>.ReleaseEvent(soldier.OnSoldierMovementStart , OnSoldierBeginMovement);
+            EventCatcher<Soldier>.ReleaseEvent(soldier.OnSoldierMovementStop , OnSoldierStopMovement);
+            EventCatcher<Soldier,Vector2Int , Action<bool>>.ReleaseEvent(soldier.StartMoveToNextCell ,CheckCellIsValidToMove);
             soldierPool.ReturnObject(soldier , soldier.UniqueIDForType);
+            soldiersListOnGrid.Remove(soldier);
         }
         else
         {
             Debug.LogError("UNDEFINED UNIT AND POOL");
         }
-        SetCellsEmptyForDestroyedUnitCoveredArea(destroyedUnit.MyPosition , destroyedUnit.Width , destroyedUnit.Height);
+        SetCellsEmpty(destroyedUnit.MyPosition , destroyedUnit.Width , destroyedUnit.Height);
     }
 
 
@@ -140,7 +169,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
     {
         GenerateGrid();
     }
-    public void SetCellsNotEmptyForCoveredBuildArea(Vector2Int cellPosition, int width , int height)
+    public void SetCellsNotEmptyForCoveredUnitArea(Vector2Int cellPosition, int width , int height)
     {
         for (int i = 0; i < width; i++)
         {
@@ -152,7 +181,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
         }
     }
     
-    public void SetCellsEmptyForDestroyedUnitCoveredArea(Vector2Int cellPosition, int width, int height)
+    public void SetCellsEmpty(Vector2Int cellPosition, int width, int height)
     {
         for (int i = 0; i < width; i++)
         {

@@ -35,6 +35,10 @@ public class Grid
         }
     }
 
+    public bool IsTargetCellEmpty(Vector2Int coordinate)
+    {
+        return cells[coordinate.x, coordinate.y].IsEmptyCell;
+    }
     public bool IsTargetCellValid(Vector2Int coordinate)
     {
         return coordinate.x >= 0 && coordinate.x <= rowCount - 1 && coordinate.y >= 0 &&
