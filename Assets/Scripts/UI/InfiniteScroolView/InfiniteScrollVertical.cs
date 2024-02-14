@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -58,12 +59,44 @@ public class InfiniteScrollVertical : MonoBehaviour, IBeginDragHandler, IDragHan
         var lItem = scrollRect.content.GetChild(leftItemIndex);
 
         int rItemIndex = positiveDrag ? scrollRect.content.childCount - 2 : 1;
-        var rItem = scrollRect.content.GetChild(rItemIndex);
-
+       var rItem = scrollRect.content.GetChild(rItemIndex);
+      /*
+        List<int> itemsIndexesInRow = new List<int>();
+        List<Transform> itemList = new List<Transform>();
+        if (positiveDrag)
+        {
+            for (int i = 0; i < gridLayout.constraintCount ; i++)
+            {
+                int index = scrollRect.content.childCount - 1 - i;
+                itemsIndexesInRow.Add(index);
+                itemList.Add(scrollRect.content.GetChild(index));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < gridLayout.constraintCount ; i++)
+            {
+                int index = i;
+                itemsIndexesInRow.Add(index);
+                itemList.Add(scrollRect.content.GetChild(index));
+            }
+        }
+        */
+        /*
+        for (int i = 0; i < itemList.Count; i++)
+        {
+            if (ReachedThreshold(itemList[i]))
+            {
+                return;
+            }
+        }
+        */
+        
         if (!ReachedThreshold(rItem) && !ReachedThreshold(lItem))
         {
             return;
         }
+        
         Vector2 newPos = scrollRect.content.anchoredPosition;
 
         if (positiveDrag)
@@ -93,6 +126,22 @@ public class InfiniteScrollVertical : MonoBehaviour, IBeginDragHandler, IDragHan
 
         int nIndex = positiveDrag ? 0 : scrollRect.content.childCount - 1;
 
+        /*
+        if (positiveDrag)
+        {
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                itemList[i].SetSiblingIndex(nIndex + i);
+            }
+        }
+        else
+        {
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                itemList[i].SetSiblingIndex(nIndex - i);
+            }
+        }
+        */
         rItem.SetSiblingIndex(nIndex);
         lItem.SetSiblingIndex(positiveDrag ? nIndex + 1 : nIndex - 1);
         scrollRect.content.anchoredPosition = newPos;
