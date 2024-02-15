@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using EventHandler;
 using UnityEngine;
 using UnityEngine.UI;
-public class SoldierCreateButton : MonoBehaviour
+public class SoldierCreateButton : MonoBehaviour,IEnableDisable
 {
     [SerializeField] private Image soldierICon;
     private Button myButton;
@@ -24,5 +24,18 @@ public class SoldierCreateButton : MonoBehaviour
     public void OnCreateSoldierButtonClicked()
     {
         myBuilding.CreateSoldier(mySoldier);
+    }
+
+    public void PerformOnEnable()
+    {
+        
+    }
+
+    public void PerformOnDisable()
+    {
+        myButton.onClick.RemoveListener(OnCreateSoldierButtonClicked);
+        myBuilding = null;
+        mySoldier = null;
+        this.gameObject.SetActive(false);
     }
 }

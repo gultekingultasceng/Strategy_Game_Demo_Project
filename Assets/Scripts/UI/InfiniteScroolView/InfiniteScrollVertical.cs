@@ -20,14 +20,14 @@ public class InfiniteScrollVertical : MonoBehaviour, IBeginDragHandler, IDragHan
         horizontal
     }
     [SerializeField] private ScrollType scrolltype;
-    public void Initialize()
+    public void OnEnable()
     {
         scrollRect.movementType = ScrollRect.MovementType.Unrestricted;
         scrollRect.onValueChanged.AddListener(OnViewScroll);
-        CalculateHeight();
+        SetSize();
         scrolltype = scrollRect.vertical ? ScrollType.vertical : ScrollType.horizontal;
     }
-    private void CalculateHeight()
+    private void SetSize()
     {
         rect = GetComponent<RectTransform>();
         size = scrolltype == ScrollType.vertical ? rect.rect.height : rect.rect.width;

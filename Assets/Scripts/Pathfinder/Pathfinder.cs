@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
     public static class PathFinder { 
-    public static List<Cell> FindPath(Cell startCell, Cell targetCell) {
+    public static List<Cell> FindPath(Cell startCell, Cell targetCell) 
+    {
             var toSearch = new List<Cell>() { startCell };
             var processed = new List<Cell>();
 
@@ -27,18 +28,43 @@ using UnityEngine;
                     return path;
                 }
                 foreach (var neighbor in current.Neighbors.Where(t => t.IsEmptyCell && !processed.Contains(t))) {
-                    var inSearch = toSearch.Contains(neighbor);
-                    var costToNeighbor = current.G + current.GetDistance(neighbor);
-                    if (!inSearch || costToNeighbor < neighbor.G) {
-                        neighbor.SetG(costToNeighbor);
-                        neighbor.SetConnection(current);
-                        if (!inSearch) {
-                            neighbor.SetH(neighbor.GetDistance(targetCell));
-                            toSearch.Add(neighbor);
+                    if (GameplayManager.Instance.selectedUnitMovementType == 
+                        GameplayManager.UnitsMovemewntType.Orthogonal) // this condition should set as static bool once for performance.
+                    {                                                   // The reason I did it this way is so you can see the change in runtime.
+                        if (IsHorizontalOrVerticalMove(current,neighbor))
+                        {
+                            var inSearch = toSearch.Contains(neighbor);
+                            var costToNeighbor = current.G + current.GetDistance(neighbor);
+                            if (!inSearch || costToNeighbor < neighbor.G) {
+                                neighbor.SetG(costToNeighbor);
+                                neighbor.SetConnection(current);
+                                if (!inSearch) {
+                                    neighbor.SetH(neighbor.GetDistance(targetCell));
+                                    toSearch.Add(neighbor);
+                                }
+                            }
                         }
                     }
+                    else
+                    {
+                        var inSearch = toSearch.Contains(neighbor);
+                        var costToNeighbor = current.G + current.GetDistance(neighbor);
+                        if (!inSearch || costToNeighbor < neighbor.G) {
+                            neighbor.SetG(costToNeighbor);
+                            neighbor.SetConnection(current);
+                            if (!inSearch) {
+                                neighbor.SetH(neighbor.GetDistance(targetCell));
+                                toSearch.Add(neighbor);
+                            }
+                        }
+                    }
+                   
+                
                 }
             }
             return null;
         }
+    private static bool IsHorizontalOrVerticalMove(Cell current, Cell neighbor) {
+        return Mathf.Abs(current.MyRowOrder - neighbor.MyRowOrder) + Mathf.Abs(current.MyColumnOrder - neighbor.MyColumnOrder) == 1;
+    }
     }

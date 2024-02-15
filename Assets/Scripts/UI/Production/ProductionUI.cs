@@ -25,6 +25,6 @@ public class ProductionUI : MonoBehaviour
                 button.SetTheCreateButton(produceableUnitList[i]);
             }
         }
-        infiniteScrollView.Initialize();
+        infiniteScrollView.gameObject.SetActive(true);
     }
 }

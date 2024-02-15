@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitIcon: {fileID: 21300000, guid: cbe449bd71b644b17903dfffa23d5953, type: 3}
-  unitDescription: Colonel
+  unitDescription: Corporal
   unitTitle: Soldier_3
 --- !u!114 &5470303211754258994
 MonoBehaviour:
@@ -118,5 +118,6 @@ MonoBehaviour:
   width: 1
   height: 1
   movementSpeed: 3
-  damagePoint: 0
-  attackSpeed: 0
+  damagePoint: 2
+  attackSpeed: 2
+  attackRange: 0

@@ -96,7 +96,6 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
     
     private void CheckCellIsValidToMove(Soldier soldier,Vector2Int coordinate , Action<bool> onComplete)
     {
-        Debug.Log("checking");
         onComplete?.Invoke(generatedGrid.IsTargetCellEmpty(coordinate));
     }
     private void OnSoldierBeginMovement(Soldier soldier)

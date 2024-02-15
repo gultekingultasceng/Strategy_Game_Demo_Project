@@ -17,6 +17,12 @@ public class Unit : MonoBehaviour
     [SerializeField] public UnitConfig _UnitConfig;
     private UnitUISettings unitUISettings;
     public EventThrower<Unit> OnDestroy = new EventThrower<Unit>();
+    private bool isDestroyed = false;
+    public bool IsDestroyed
+    {
+        get => isDestroyed;
+        protected set => isDestroyed = value;
+    }
     public UnitUISettings _UnitUISettings
     {
         get
@@ -84,6 +90,11 @@ public class Unit : MonoBehaviour
         unitUISettings = GetComponent<UnitUISettings>();
     }
 
+    private void OnEnable()
+    {
+        IsDestroyed = false;
+    }
+    
     private void MoveToPosition(Vector2Int coordinate)
     {
         transform.position = new Vector3(coordinate.x, coordinate.y, 0f);
@@ -103,6 +114,7 @@ public class Unit : MonoBehaviour
 
     public void DestroyMe()
     {
+        isDestroyed = true;
         OnDestroy.Throw(this);
     }
 }

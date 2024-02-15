@@ -36,20 +36,46 @@ public class Soldier : Unit , IEnableDisable<Vector3>
 
     public void SetNextCellMoveable(bool isAvailable)
     {
-        Debug.Log("checking result" + isAvailable);
         isNextTargetCellToMoveStillEmpty = isAvailable;
     }
     public void Move(List<Cell> path , Unit targetUnit)
     {
+        StopAttack();
         StopMovement();
         OnSoldierMovementStart.Throw(this);
-        movementCoroutine =  StartCoroutine(Movevement(path , targetUnit));
+        bool isTargetUnitExist = targetUnit != null;
+        path.Reverse();
+        if (path.Count >= attackRange)
+        {
+            for (int i = 0; i < attackRange ; i++)
+            {
+                path.Remove(path[^1]);
+            }
+        }
+        if (isTargetUnitExist)
+        {
+            if (!isTargetUnitInMyAttackRange(targetUnit.MyPosition))
+            {
+                movementCoroutine =  StartCoroutine(Movevement(path , targetUnit));
+            }
+            else
+            {
+                AttackToUnit(targetUnit);
+            }
+        }
+        else
+        {
+            movementCoroutine =  StartCoroutine(Movevement(path , targetUnit));
+        }
     }
-    
- 
+
+
+    bool isTargetUnitInMyAttackRange(Vector2Int target)
+    {
+        return Mathf.Abs(target.x - MyPosition.x) + Mathf.Abs(target.y - myPosition.y) <= attackRange;
+    }
     private IEnumerator Movevement(List<Cell> path , Unit targetUnit)
     {
-        path.Reverse();
         for (int i = 0; i < path.Count; i++)
         {
             float timer = 0f;
@@ -90,21 +116,18 @@ public class Soldier : Unit , IEnableDisable<Vector3>
 
     #region Attack
     [SerializeField] private int damagePoint;
-    [SerializeField] private float attackSpeed;
+    [SerializeField] [Range(1 , 5)] private float attackSpeed;
+    [SerializeField][Range(0,3)] private int attackRange;
     private Coroutine attackCoroutine;
     private IEnumerator Attack(Unit targetUnit)
     {
-        int damage = 5;
-        float attackspeed = 5; // 1-10
-        if (targetUnit != null)
+       
+        while (targetUnit is {IsDestroyed:false}) // if targetUnit is not null and still exist
         {
-            targetUnit.UnderAttack(5);
-            yield return new WaitForSeconds(1 / attackspeed);
+            targetUnit.UnderAttack(damagePoint);
+            yield return new WaitForSeconds(1 / attackSpeed);
         }
-        else
-        {
-            yield return null;
-        }
+        StopAttack();
     }
     private void AttackToUnit(Unit targetUnit)
     {

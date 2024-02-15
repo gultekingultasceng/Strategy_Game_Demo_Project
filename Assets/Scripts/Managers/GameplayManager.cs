@@ -17,7 +17,22 @@ public class GameplayManager : Singleton<GameplayManager>
     }
 
     [SerializeField] private Stages stage;
-    
+
+    [System.Serializable]
+    public enum UnitsMovemewntType
+    {
+        Orthogonal,
+        Cardinal
+    }
+
+    [SerializeField] private UnitsMovemewntType unitsMovement;
+
+    public UnitsMovemewntType selectedUnitMovementType
+    {
+        get => unitsMovement;
+    }
+
+
     public void ProductionStage()
     {
         stage = Stages.Production;
@@ -28,7 +43,7 @@ public class GameplayManager : Singleton<GameplayManager>
     }
 
     private Unit lastSelectedUnit;
-    public Unit rightClickTarget;
+    private Unit rightClickTarget;
     public EventThrower<Unit> OnSelectUnit;
     public void Initialize()
     {

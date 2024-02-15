@@ -14,6 +14,7 @@ public class InformationUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private Transform productsContent;
     [SerializeField] private SoldierCreateButton soldierCreateButtonPrefab;
+    [SerializeField] private SoldierCreateButtonPool soldierCreateButtonPool;
     public void SetInformationUI(Unit unit)
     {
         titleText.text = unit._UnitUISettings.UnitTitle;
@@ -28,14 +29,16 @@ public class InformationUI : MonoBehaviour
                 {
                     foreach (Transform oldButtons in productsContent)
                     {
-                        Destroy(oldButtons.gameObject);
+                        soldierCreateButtonPool.ReturnObject(oldButtons.GetComponent<SoldierCreateButton>());
                     }
                 }
              
                 for (int i = 0; i < building.ProducableList.Count; i++)
                 {
-                    SoldierCreateButton soldierCreateButton = Instantiate(soldierCreateButtonPrefab.gameObject, productsContent).GetComponent<SoldierCreateButton>();
+                    SoldierCreateButton soldierCreateButton =
+                        soldierCreateButtonPool.GetObject(soldierCreateButtonPrefab.gameObject, productsContent);
                     soldierCreateButton.SetTheCreateButton(building,building.ProducableList[i]);
+                    soldierCreateButton.gameObject.SetActive(true);
                 }
             }
             else
