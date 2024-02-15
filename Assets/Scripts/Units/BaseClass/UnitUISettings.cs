@@ -54,7 +54,7 @@ public class UnitUISettings : MonoBehaviour
     {
         StartCoroutine(DamageEffect());
     }
-    IEnumerator DamageEffect(float delay = .2f)
+    IEnumerator DamageEffect(float delay = .05f)
     {
         _SpriteRenderer.color = damagedColor;
         yield return new WaitForSeconds(delay);

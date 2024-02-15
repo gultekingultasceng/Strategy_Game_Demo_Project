@@ -46,7 +46,7 @@ public class Soldier : Unit , IEnableDisable<Vector3>
         {
             return;
         }
-        OnSoldierMovementStart.Throw(this);
+        
         bool isTargetUnitExist = targetUnit != null;
         path.Reverse();
         if (path.Count >= attackRange)
@@ -80,6 +80,7 @@ public class Soldier : Unit , IEnableDisable<Vector3>
     }
     private IEnumerator Movevement(List<Cell> path , Unit targetUnit)
     {
+        OnSoldierMovementStart.Throw(this);
         for (int i = 0; i < path.Count; i++)
         {
             float timer = 0f;
@@ -124,17 +125,17 @@ public class Soldier : Unit , IEnableDisable<Vector3>
     private Coroutine attackCoroutine;
     private IEnumerator Attack(Unit targetUnit)
     {
-        if (targetUnit is {IsDestroyed:false}) // if targetUnit is not null and still exist
+        if (targetUnit is {IsDestroyed: false}) // if targetUnit is not null and still exist
         {
-            yield return new WaitForSeconds(1 / attackSpeed);
+            Debug.Log("attack");
             targetUnit.UnderAttack(damagePoint);
-            attackCoroutine = StartCoroutine(Attack(targetUnit));
-        }
-        else
-        {
-            StopMovement();
-            StopAttack();
-        }
+            yield return new WaitForSeconds(1 / attackSpeed);
+            if (targetUnit is {IsDestroyed: false})
+                yield return StartCoroutine(Attack(targetUnit));
+            else
+                StopAttack();
+        } 
+        StopAttack();
     }
     private void AttackToUnit(Unit targetUnit)
     {

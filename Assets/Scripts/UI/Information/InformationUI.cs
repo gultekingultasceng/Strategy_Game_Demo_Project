@@ -32,7 +32,6 @@ public class InformationUI : MonoBehaviour
                         soldierCreateButtonPool.ReturnObject(oldButtons.GetComponent<SoldierCreateButton>());
                     }
                 }
-             
                 for (int i = 0; i < building.ProducableList.Count; i++)
                 {
                     SoldierCreateButton soldierCreateButton =

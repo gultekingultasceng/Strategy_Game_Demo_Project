@@ -20,17 +20,14 @@ public class SoldierCreateButton : MonoBehaviour,IEnableDisable
         myBuilding = building;
         mySoldier = soldier;
     }
-
     public void OnCreateSoldierButtonClicked()
     {
         myBuilding.CreateSoldier(mySoldier);
     }
-
     public void PerformOnEnable()
     {
         
     }
-
     public void PerformOnDisable()
     {
         myButton.onClick.RemoveListener(OnCreateSoldierButtonClicked);
