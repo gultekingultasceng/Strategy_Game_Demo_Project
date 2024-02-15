@@ -75,12 +75,12 @@ SpriteRenderer:
   m_SortingLayerID: -1866232553
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 7ceda45be0bf34a918054d76334b4478, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d0f82a1696ef6406c9adaaf0fddc52a0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 4, y: 4}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51083ee9ee0ad432bab1682607d62db9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitIcon: {fileID: 21300000, guid: 7ceda45be0bf34a918054d76334b4478, type: 3}
+  unitIcon: {fileID: 21300000, guid: d0f82a1696ef6406c9adaaf0fddc52a0, type: 3}
   unitDescription: Barracks can produce soldiers
   unitTitle: Barrack
 --- !u!114 &4720891324373824213

@@ -55,21 +55,21 @@ SpriteAtlas:
   m_PackedSprites:
   - {fileID: 21300000, guid: 02e75f927400a47da88d927b3636770f, type: 3}
   - {fileID: 21300000, guid: 973f7a1388c664a369cb23cc83fbdfbf, type: 3}
+  - {fileID: 21300000, guid: d0f82a1696ef6406c9adaaf0fddc52a0, type: 3}
   - {fileID: 21300000, guid: aef464a6f0af149be8daf29edd2093c6, type: 3}
   - {fileID: 21300000, guid: b71f40971fccb46569a57660cc73b036, type: 3}
-  - {fileID: 21300000, guid: 7ceda45be0bf34a918054d76334b4478, type: 3}
   - {fileID: 21300000, guid: 9a26353c9f0384887a7ab45a4ddc2833, type: 3}
-  - {fileID: 21300000, guid: 4f7dc5fc8255a4a9aaa3e5437e0e10a2, type: 3}
+  - {fileID: 21300000, guid: c26264bc8dd4f4fecaae66afb517c4ad, type: 3}
   - {fileID: 21300000, guid: 44af366dd2a1444c896ae70d88768c86, type: 3}
   - {fileID: 21300000, guid: cbe449bd71b644b17903dfffa23d5953, type: 3}
   m_PackedSpriteNamesToIndex:
   - Panel_Smooth
   - square
+  - barrackicon
   - soldier2
   - SquareSmooth
-  - barracks
   - tile
-  - powerplant
+  - powerplanticon
   - soldier1
   - soldier3
   m_RenderDataMap: {}

@@ -42,6 +42,10 @@ public class Soldier : Unit , IEnableDisable<Vector3>
     {
         StopAttack();
         StopMovement();
+        if (path == null)
+        {
+            return;
+        }
         OnSoldierMovementStart.Throw(this);
         bool isTargetUnitExist = targetUnit != null;
         path.Reverse();
