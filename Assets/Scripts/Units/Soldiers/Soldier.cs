@@ -122,19 +122,19 @@ public class Soldier : Unit , IEnableDisable<Vector3>
     [SerializeField] private int damagePoint;
     [SerializeField] [Range(1 , 5)] private float attackSpeed;
     [SerializeField][Range(0,3)] private int attackRange;
+    [SerializeField] private Unit targetUnitToAttack;
     private Coroutine attackCoroutine;
     private IEnumerator Attack(Unit targetUnit)
     {
-        if (targetUnit is {IsDestroyed: false}) // if targetUnit is not null and still exist
+        targetUnitToAttack = targetUnit;
+        while (targetUnitToAttack is {IsDestroyed: false}) // if targetUnit is not null and still exist
         {
-            Debug.Log("attack");
-            targetUnit.UnderAttack(damagePoint);
-            yield return new WaitForSeconds(1 / attackSpeed);
-            if (targetUnit is {IsDestroyed: false})
-                yield return StartCoroutine(Attack(targetUnit));
-            else
-                StopAttack();
-        } 
+            targetUnitToAttack.UnderAttack(damagePoint);
+            if (targetUnitToAttack is {IsDestroyed: false})
+            {
+                yield return new WaitForSeconds(1 / attackSpeed);
+            }
+        }
         StopAttack();
     }
     private void AttackToUnit(Unit targetUnit)
@@ -149,6 +149,7 @@ public class Soldier : Unit , IEnableDisable<Vector3>
         {
             StopCoroutine(attackCoroutine);
         }
+        targetUnitToAttack = null;
         attackCoroutine = null;
     }
     #endregion
@@ -161,10 +162,8 @@ public class Soldier : Unit , IEnableDisable<Vector3>
     }
     public void PerformDisable()
     {
-        if (movementCoroutine != null)
-        {
-            StopCoroutine(movementCoroutine);
-        }
+        StopMovement();
+        StopAttack();
         this.gameObject.SetActive(false);
     }
 }
