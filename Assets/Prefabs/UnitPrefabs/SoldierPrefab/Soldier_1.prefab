@@ -120,4 +120,4 @@ MonoBehaviour:
   movementSpeed: 3
   damagePoint: 10
   attackSpeed: 2
-  attackRange: 2
+  attackRange: 0
