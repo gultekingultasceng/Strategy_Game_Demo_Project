@@ -10,8 +10,8 @@ using SGD.Core.Pathfinding;
 namespace SGD.Core.Base
 {
     [RequireComponent(typeof(SoldierUISettings))]
-public class Soldier : Unit , IEnableDisable<Vector3>
-{
+    public class Soldier : Unit , IEnableDisable<Vector3>
+    {
     private SoldierUISettings _soldierUISettings;
     
     public SoldierUISettings SoldierUISettings

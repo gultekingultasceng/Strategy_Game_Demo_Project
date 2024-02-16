@@ -53,6 +53,32 @@ namespace SGD.Core.Managers
         EventCatcher<Unit>.Catch(createdUnit.OnDestroy, UnitDestroyed);
     }
 
+    public Vector2Int GetClosestCellAroundBuildingToSoldier(Vector2Int buildingCoordinate , int width , int height , Vector2Int soldierCoordinate)
+    {
+        List<Vector2Int> aroundCellsCoordinate = new List<Vector2Int>();
+        for (int i = -1; i <= width; i++)
+        {
+            for (int j = -1; j <= height; j++)
+            {
+                aroundCellsCoordinate.Add(new Vector2Int(buildingCoordinate.x + i , buildingCoordinate.y + j));
+            }
+        }
+
+        int minDistance = 100;
+        int closestCellIndex = 0;
+        for (int k = 0; k < aroundCellsCoordinate.Count; k++)
+        {
+            int distance =Mathf.Abs(aroundCellsCoordinate[k].x - soldierCoordinate.x) + Mathf.Abs(aroundCellsCoordinate[k].y - soldierCoordinate.y);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestCellIndex = k;
+            }
+        }
+
+        return aroundCellsCoordinate[closestCellIndex];
+
+    }
 
     public Vector2Int GetNearestEmptyCell(Vector2Int coordinate , int width , int height) // INITIAL SPAWN POINT  => coordinate
     {

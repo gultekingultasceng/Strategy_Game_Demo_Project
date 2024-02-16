@@ -89,7 +89,7 @@ namespace SGD.Core.Managers
             else
             {
                 Vector2Int nearestEmptyCellCoordinate =
-                    MapGenerateManager.Instance.GetNearestEmptyCell(coordinate, soldier.Width, soldier.Height);
+                    MapGenerateManager.Instance.GetClosestCellAroundBuildingToSoldier(_rightClickTarget.MyPosition,_rightClickTarget.Width, _rightClickTarget.Height , soldier.MyPosition);
                 soldier.Move(PathFinder.FindPath(
                     MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(soldier.MyPosition),
                     MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(nearestEmptyCellCoordinate)
