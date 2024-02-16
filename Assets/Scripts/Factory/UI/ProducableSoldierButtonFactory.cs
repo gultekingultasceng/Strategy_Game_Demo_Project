@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ProducableSoldierButtonFactory : Factory<SoldierCreateButton,GameObject,Transform>
 {
-    public override SoldierCreateButton Create(GameObject Button, Transform parent)
+    public override SoldierCreateButton Create(GameObject button, Transform parent)
     {
-        return Instantiate(Button, parent).GetComponent<SoldierCreateButton>();
+        return Instantiate(button, parent).GetComponent<SoldierCreateButton>();
     }
 }

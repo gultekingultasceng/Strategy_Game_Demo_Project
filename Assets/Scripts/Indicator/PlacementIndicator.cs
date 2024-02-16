@@ -6,13 +6,13 @@ using UnityEngine;
 
 public class PlacementIndicator : MonoBehaviour
 {
-    private Unit specifiedUnit;
-    private Cell targetCell;
+    private Unit _specifiedUnit;
+    private Cell _targetCell;
     [SerializeField] private bool isPlaceable;
 
     public Unit SpecifiedUnit
     {
-        get => specifiedUnit;
+        get => _specifiedUnit;
     }
     public bool IsPlaceable
     {
@@ -22,17 +22,17 @@ public class PlacementIndicator : MonoBehaviour
     public void SetUnit(Unit unit)
     {
         isPlaceable = false;
-        targetCell = null;
-        spriteRenderer.sprite = unit._UnitUISettings.UnitIcon;
-        specifiedUnit = unit;
+        _targetCell = null;
+        spriteRenderer.sprite = unit.UnitUISettings.UnitIcon;
+        _specifiedUnit = unit;
     }
     public Vector2Int GetLastPosition()
     {
-        if (targetCell != null)
+        if (_targetCell != null)
         {
             if (isPlaceable)
             {
-                return targetCell.GetMyXYCoordinates();
+                return _targetCell.GetMyXYCoordinates();
             }
             else
             {
@@ -46,21 +46,21 @@ public class PlacementIndicator : MonoBehaviour
     }
     private void Update()
     {
-        if (specifiedUnit == null)
+        if (_specifiedUnit)
         {
-            return;
+            spriteRenderer.color = isPlaceable ? GameConsts.PlacementFitColor : GameConsts.PlacementErrorColor;
+            _targetCell = MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(InputHandler.Instance.GetMouseButtonData());
+            if (_targetCell != null)
+            {
+                transform.position = _targetCell.GetMyWorldPos();
+                isPlaceable = MapGenerateManager.Instance.IsCellBuildable(_targetCell.GetMyXYCoordinates() , _specifiedUnit.Width , _specifiedUnit.Height);
+            }
+            else
+            {
+                isPlaceable = false;
+                transform.position = InputHandler.Instance.MousePosition;
+            }
         }
-        spriteRenderer.color = isPlaceable ? GameConsts.PlacementFitColor : GameConsts.PlacementErrorColor;
-        targetCell = MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(InputHandler.Instance.getMouseButtonData());
-        if (targetCell != null)
-        {
-            transform.position = targetCell.GetMyWorldPos();
-            isPlaceable = MapGenerateManager.Instance.IsCellBuildable(targetCell.GetMyXYCoordinates() , specifiedUnit.Width , specifiedUnit.Height);
-        }
-        else
-        {
-            isPlaceable = false;
-            transform.position = InputHandler.Instance.Mousepos;
-        }
+       
     }
 }

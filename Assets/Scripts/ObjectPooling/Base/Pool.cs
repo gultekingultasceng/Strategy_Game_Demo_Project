@@ -15,7 +15,7 @@ namespace ObjectPoolingSystem
         where T : IEnableDisable
     {
         public abstract Factory<T , TParameter1 , TParameter2> Factory { get; set; }
-        private Stack<T> pool = new Stack<T>();
+        private readonly Stack<T> pool = new Stack<T>();
         public T GetObject(TParameter1 parameter1, TParameter2 parameter2)
         {
             T obj =  pool.Count > 0 ? pool.Pop() : Factory.Create(parameter1, parameter2);
@@ -40,9 +40,7 @@ namespace ObjectPoolingSystem
     public abstract class Pool<T, TUniqueID, TParameter1, TParameter2, TParameter3> : MonoBehaviour,IPool<T,TUniqueID ,TParameter1, TParameter2, TParameter3> where T : IEnableDisable<TParameter2>
     {
         public abstract Factory<T , TParameter1 , TParameter2, TParameter3> Factory { get; set; }
-        //private Stack<T> pool = new Stack<T>();
-        //private List<T> pool = new List<T>();
-        private Dictionary<TUniqueID, List<T>> MyUniqueTypeForPool = new Dictionary<TUniqueID, List<T>>();
+        private readonly Dictionary<TUniqueID, List<T>> _myUniqueTypeForPool = new Dictionary<TUniqueID, List<T>>();
         public T GetObject(TUniqueID uniqueID,TParameter1 param1, TParameter2 param2, TParameter3 param3)
         {
             T obj = GetTObjectWithUniqueID(uniqueID, param1, param2, param3);
@@ -51,7 +49,7 @@ namespace ObjectPoolingSystem
         }
         public void ReturnObject(T obj , TUniqueID id)
         {
-            if (MyUniqueTypeForPool.TryGetValue(id , out List<T> objList))
+            if (_myUniqueTypeForPool.TryGetValue(id , out List<T> objList))
             {
                 objList.Add(obj);
             }
@@ -59,13 +57,13 @@ namespace ObjectPoolingSystem
             {
                 List<T> newlist = new List<T>(); // REGISTER AS LIST
                 newlist.Add(obj);
-                MyUniqueTypeForPool.Add(id,newlist);
+                _myUniqueTypeForPool.Add(id,newlist);
             }
             obj.PerformDisable();
         }
         public T GetTObjectWithUniqueID(TUniqueID id , TParameter1 param1, TParameter2 param2, TParameter3 param3)
         {
-            if (MyUniqueTypeForPool.TryGetValue(id , out List<T> objList) && objList.Count > 0)
+            if (_myUniqueTypeForPool.TryGetValue(id , out List<T> objList) && objList.Count > 0)
             {
                 T getFromList = objList[^1]; // Get Last Added
                 objList.Remove(getFromList); // remove from list
@@ -77,10 +75,7 @@ namespace ObjectPoolingSystem
                 return created;
             }
         }
-       
     }
-
-
 }
 
 

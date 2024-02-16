@@ -10,7 +10,7 @@ public class GameplayManager : Singleton<GameplayManager>
         base.Awake();
     }
     [System.Serializable]
-    enum Stages
+    private enum Stages
     {
         Selection,
         Production
@@ -19,15 +19,15 @@ public class GameplayManager : Singleton<GameplayManager>
     [SerializeField] private Stages stage;
 
     [System.Serializable]
-    public enum UnitsMovemewntType
+    public enum UnitsMovementType
     {
         Orthogonal,
         Cardinal
     }
 
-    [SerializeField] private UnitsMovemewntType unitsMovement;
+    [SerializeField] private UnitsMovementType unitsMovement;
 
-    public UnitsMovemewntType selectedUnitMovementType
+    public UnitsMovementType SelectedUnitMovementType
     {
         get => unitsMovement;
     }
@@ -37,17 +37,17 @@ public class GameplayManager : Singleton<GameplayManager>
     {
         stage = Stages.Production;
     }
-    public void SelectionStage()
+    
+    private void SelectionStage()
     {
         stage = Stages.Selection;
     }
 
-    private Unit lastSelectedUnit;
-    private Unit rightClickTarget;
-    public EventThrower<Unit> OnSelectUnit;
+    private Unit _lastSelectedUnit;
+    private Unit _rightClickTarget;
+    public EventThrower<Unit> OnSelectUnit  = new EventThrower<Unit>();
     public void Initialize()
     {
-        OnSelectUnit = new EventThrower<Unit>();
         EventCatcher<Vector2Int>.Catch(InputHandler.Instance.OnLeftMouseButtonClick , LeftMouseClicked);
         EventCatcher<Vector2Int>.Catch(InputHandler.Instance.OnRightMouseButtonClick , RightMouseClicked);
         EventCatcher.Catch(MapGenerateManager.Instance.OnCreateBuilding , SelectionStage);
@@ -56,8 +56,8 @@ public class GameplayManager : Singleton<GameplayManager>
     {
         if (stage == Stages.Selection)
         {
-            lastSelectedUnit = MapGenerateManager.Instance.IsUnitExistOnPosition(coordinate);
-            OnSelectUnit.Throw(lastSelectedUnit);
+            _lastSelectedUnit = MapGenerateManager.Instance.IsUnitExistOnPosition(coordinate);
+            OnSelectUnit.Throw(_lastSelectedUnit);
         }
         else if (stage == Stages.Production)
         {
@@ -70,14 +70,14 @@ public class GameplayManager : Singleton<GameplayManager>
     }
     private void RightMouseClicked(Vector2Int coordinate)
     {
-        if (lastSelectedUnit is Soldier soldier)
+        if (_lastSelectedUnit is Soldier soldier)
         {
-            rightClickTarget = MapGenerateManager.Instance.IsUnitExistOnPosition(coordinate);
-            if (lastSelectedUnit == rightClickTarget) // IF TARGET AND SELECTED SAME POSITION
+            _rightClickTarget = MapGenerateManager.Instance.IsUnitExistOnPosition(coordinate);
+            if (_lastSelectedUnit == _rightClickTarget) // IF TARGET AND SELECTED OBJECT SAME POSITION
             {
                 return;
             }
-            if (rightClickTarget == null)
+            if (_rightClickTarget == null)
             {
                 soldier.Move(PathFinder.FindPath(
                     MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(soldier.MyPosition),
@@ -91,7 +91,7 @@ public class GameplayManager : Singleton<GameplayManager>
                 soldier.Move(PathFinder.FindPath(
                     MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(soldier.MyPosition),
                     MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(nearestEmptyCellCoordinate)
-                ) , rightClickTarget);
+                ) , _rightClickTarget);
             }
            
         }

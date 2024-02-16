@@ -114,10 +114,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueIDForUnitType: 2
-  _UnitConfig: {fileID: 11400000, guid: 763010e97ae0c49bf815d944e42d3195, type: 2}
+  unitConfig: {fileID: 11400000, guid: 763010e97ae0c49bf815d944e42d3195, type: 2}
   width: 1
   height: 1
   movementSpeed: 3
   damagePoint: 10
   attackSpeed: 2
   attackRange: 0
+  targetUnitToAttack: {fileID: 0}

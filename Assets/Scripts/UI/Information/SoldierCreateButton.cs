@@ -6,23 +6,23 @@ using UnityEngine.UI;
 public class SoldierCreateButton : MonoBehaviour,IEnableDisable
 {
     [SerializeField] private Image soldierICon;
-    private Button myButton;
-    private Building myBuilding;
-    private Soldier mySoldier;
+    private Button _myButton;
+    private Building _myBuilding;
+    private Soldier _mySoldier;
     public void SetTheCreateButton(Building building,Soldier soldier)
     {
-        soldierICon.sprite = soldier._SoldierUISettings.UnitIcon;
-        if (myButton == null)
+        soldierICon.sprite = soldier.SoldierUISettings.UnitIcon;
+        if (_myButton == null)
         {
-            myButton = GetComponent<Button>();
+            _myButton = GetComponent<Button>();
         }
-        myButton.onClick.AddListener(OnCreateSoldierButtonClicked);
-        myBuilding = building;
-        mySoldier = soldier;
+        _myButton.onClick.AddListener(OnCreateSoldierButtonClicked);
+        _myBuilding = building;
+        _mySoldier = soldier;
     }
     public void OnCreateSoldierButtonClicked()
     {
-        myBuilding.CreateSoldier(mySoldier);
+        _myBuilding.CreateSoldier(_mySoldier);
     }
     public void PerformOnEnable()
     {
@@ -30,9 +30,9 @@ public class SoldierCreateButton : MonoBehaviour,IEnableDisable
     }
     public void PerformOnDisable()
     {
-        myButton.onClick.RemoveListener(OnCreateSoldierButtonClicked);
-        myBuilding = null;
-        mySoldier = null;
+        _myButton.onClick.RemoveListener(OnCreateSoldierButtonClicked);
+        _myBuilding = null;
+        _mySoldier = null;
         this.gameObject.SetActive(false);
     }
 }

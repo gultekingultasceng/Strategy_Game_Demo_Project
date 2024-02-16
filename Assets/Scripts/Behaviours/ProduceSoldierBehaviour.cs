@@ -1,19 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 [CreateAssetMenu(fileName = "ProduceSoldierBehaviour", menuName = "Behaviours/Buildings/ProduceSoldierBehaviour")]
 public class ProduceSoldierBehaviour : ScriptableObject
 {
-    public List<Soldier> producableList = new List<Soldier>();
+    public List<Soldier> ProduceableList = new List<Soldier>();
     [System.Serializable]
-    public enum soldierSpawnDirection
+    public enum SoldierSpawnDirection
     {
-        left,
-        right,
-        top,
-        bot
+        Left,
+        Right,
+        Top,
+        Bot
     }
-
-     public soldierSpawnDirection spawnDirection;
+    public SoldierSpawnDirection SpawnDirection;
 }

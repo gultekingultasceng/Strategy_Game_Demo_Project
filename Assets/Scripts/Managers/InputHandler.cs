@@ -7,16 +7,16 @@ using Utilities;
 using EventHandler;
 public class InputHandler : Singleton<InputHandler>
 {
-    public Camera _MainCamera;
-    private Vector2 mousepos;
-    public Vector2 Mousepos
+    public Camera mainCamera;
+    private Vector2 _mousePosition;
+    public Vector2 MousePosition
     {
-        get => mousepos;
+        get => _mousePosition;
     }
-    private bool isOnUI = false;
-    private bool isOnGrid = false;
+    private bool _isOnUI = false;
+    private bool _isOnGrid = false;
     public EventThrower<Vector2Int>OnLeftMouseButtonClick, OnRightMouseButtonClick;
-    private Vector2Int XEdge, YEdge;
+    private Vector2Int _xEdge, _yEdge;
     protected override void Awake()
     {
         base.Awake();
@@ -29,55 +29,57 @@ public class InputHandler : Singleton<InputHandler>
 
     public void SetEdges(Grid grid)
     {
-        XEdge = new Vector2Int(0, grid.RowCount);
-        YEdge = new Vector2Int(0, grid.ColumnCount);
-        _MainCamera.transform.position = new Vector3(XEdge.y * .5f, YEdge.y * .5f, _MainCamera.transform.position.z);
+        _xEdge = new Vector2Int(0, grid.RowCount);
+        _yEdge = new Vector2Int(0, grid.ColumnCount);
+        Transform mainCamTransform = mainCamera.transform;
+        mainCamTransform.position = new Vector3(_xEdge.y * .5f, _yEdge.y * .5f, mainCamTransform.position.z);
     }
     private void Update()
     {
-        mousepos = VectorUtils.GetWorldPositionFromMousePos(_MainCamera);
-        isOnUI = EventSystem.current.IsPointerOverGameObject();
-        isOnGrid = isMousePosInGridArea();
-        if (isAvailableToPublishData())
+        _mousePosition = VectorUtils.GetWorldPositionFromMousePos(mainCamera);
+        _isOnUI = EventSystem.current.IsPointerOverGameObject();
+        _isOnGrid = IsMousePosInGridArea();
+        if (IsAvailableToPublishData())
         {
             PublishMouseClickData();
         }
     }
 
-    public Vector2Int getMouseButtonData()
+    public Vector2Int GetMouseButtonData()
     {
-        return VectorUtils.GetVector2Int(mousepos);
+        return VectorUtils.GetVector2Int(_mousePosition);
     }
     public void PublishMouseClickData()
     {
-        if (isLeftMouseButtonClicked())
+        if (IsLeftMouseButtonClicked())
         {
-            OnLeftMouseButtonClick.Throw(getMouseButtonData());
+            OnLeftMouseButtonClick.Throw(GetMouseButtonData());
         }
-        if (isRightMouseButtonClicked())
+        if (IsRightMouseButtonClicked())
         {
-            OnRightMouseButtonClick.Throw(getMouseButtonData());
+            OnRightMouseButtonClick.Throw(GetMouseButtonData());
         }
     }
-    public bool isLeftMouseButtonClicked()
+
+    private static bool IsLeftMouseButtonClicked()
     {
         return Input.GetMouseButtonUp(0);
     }
 
-    public bool isRightMouseButtonClicked()
+    private static bool IsRightMouseButtonClicked()
     {
         return Input.GetMouseButtonUp(1);
     }
-    private bool isAvailableToPublishData()
+    private bool IsAvailableToPublishData()
     {
-        return isOnGrid && !isOnUI;
+        return _isOnGrid && !_isOnUI;
     }
-    private bool isMousePosInGridArea()
+    private bool IsMousePosInGridArea()
     {
-        return mousepos.x >= XEdge.x &&
-               mousepos.x <= XEdge.y &&
-               mousepos.y >= YEdge.x && 
-               mousepos.y <= YEdge.y;
+        return _mousePosition.x >= _xEdge.x &&
+               _mousePosition.x <= _xEdge.y &&
+               _mousePosition.y >= _yEdge.x && 
+               _mousePosition.y <= _yEdge.y;
     }
 
 }

@@ -16,8 +16,8 @@ public class ProductionUI : MonoBehaviour
     }
     private void FillProductsMenu()
     {
-        int ItemsCountToAddScrool = infiniteScrollView.GetRequiredItemCount();
-        for (int j = 0; j < ItemsCountToAddScrool; j++)
+        int itemsCountToAddScrool = infiniteScrollView.GetRequiredItemCount();
+        for (int j = 0; j < itemsCountToAddScrool; j++)
         {
             for (int i = 0; i < produceableUnitList.Length; i++)
             {

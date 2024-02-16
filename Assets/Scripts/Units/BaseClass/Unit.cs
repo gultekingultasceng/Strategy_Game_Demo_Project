@@ -14,27 +14,27 @@ public class Unit : MonoBehaviour
     {
         get => uniqueIDForUnitType;
     }
-    [SerializeField] public UnitConfig _UnitConfig;
-    private UnitUISettings unitUISettings;
-    public EventThrower<Unit> OnDestroy = new EventThrower<Unit>();
-    private bool isDestroyed = false;
+    [SerializeField] public UnitConfig unitConfig;
+    private UnitUISettings _unitUISettings;
+    public readonly EventThrower<Unit> OnDestroy = new EventThrower<Unit>();
+    private bool _isDestroyed = false;
     public bool IsDestroyed
     {
-        get => isDestroyed;
-        protected set => isDestroyed = value;
+        get => _isDestroyed;
+        private set => _isDestroyed = value;
     }
-    public UnitUISettings _UnitUISettings
+    public UnitUISettings UnitUISettings
     {
         get
         {
-            if (unitUISettings != null)
+            if (_unitUISettings != null)
             {
-                return unitUISettings;
+                return _unitUISettings;
             }
             else
             {
-                unitUISettings = GetComponent<UnitUISettings>();
-                return unitUISettings;
+                _unitUISettings = GetComponent<UnitUISettings>();
+                return _unitUISettings;
             }
             
         }
@@ -58,19 +58,9 @@ public class Unit : MonoBehaviour
         }
     }
 
-    protected int initialHealth;
-    protected int currentHealth;
-    public int CurrentHealth
-    {
-        set
-        {
-            currentHealth = value;
-        }
-        get
-        {
-            return currentHealth;
-        }
-    }
+    protected int InitialHealth;
+    protected int CurrentHealth;
+   
     protected Vector2Int myPosition;
     public Vector2Int MyPosition
     {
@@ -87,7 +77,7 @@ public class Unit : MonoBehaviour
     
     private void Awake()
     {
-        unitUISettings = GetComponent<UnitUISettings>();
+        _unitUISettings = GetComponent<UnitUISettings>();
     }
 
     private void OnEnable()
@@ -104,7 +94,7 @@ public class Unit : MonoBehaviour
         CurrentHealth -= damagePoint;
         if (CurrentHealth > 0)
         {
-            unitUISettings.GetDamageEffect();
+            _unitUISettings.GetDamageEffect();
         }
         else
         {
@@ -114,7 +104,7 @@ public class Unit : MonoBehaviour
 
     public void DestroyMe()
     {
-        isDestroyed = true;
+        _isDestroyed = true;
         OnDestroy.Throw(this);
     }
 }

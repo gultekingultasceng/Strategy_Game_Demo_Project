@@ -10,9 +10,9 @@ namespace Utilities
         {
             return cam.ScreenToWorldPoint(Input.mousePosition);
         }
-        public static Vector2Int GetVector2Int(Vector3 worldpos)
+        public static Vector2Int GetVector2Int(Vector3 worldPosition)
         {
-            return new Vector2Int(Mathf.FloorToInt(worldpos.x), Mathf.FloorToInt(worldpos.y));
+            return new Vector2Int(Mathf.FloorToInt(worldPosition.x), Mathf.FloorToInt(worldPosition.y));
         }
 
         public static Vector3 GetWorldPositionFromCoordinates(Vector2Int coordinates)

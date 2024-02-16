@@ -7,18 +7,18 @@ using ObjectPoolingSystem;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Utilities;
-using MAP = Configs.MapConfig;
+using Configs;
 public class MapGenerateManager : Singleton<MapGenerateManager>
 {
-    [SerializeField] private MAP mapConfig; 
+    [SerializeField] private MapConfig mapConfig; 
     [SerializeField] private Transform gridParent;
     [SerializeField] private BuildingPool buildingPool;
     [SerializeField] private SoldierPool soldierPool;
-    private Grid generatedGrid;
+    private Grid _generatedGrid;
     public Grid GeneratedGrid {
         get
         {
-            return generatedGrid;
+            return _generatedGrid;
         }
     }
     protected override void Awake()
@@ -26,24 +26,27 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
         base.Awake();
     }
 
-    public EventThrower OnCreateBuilding = new EventThrower();
-    private List<Building> buildingListOnGrid = new List<Building>();
-    private List<Soldier> soldiersListOnGrid = new List<Soldier>();
+    public readonly EventThrower OnCreateBuilding = new EventThrower();
+    private readonly List<Building> _buildingListOnGrid = new List<Building>();
+    private readonly List<Soldier> _soldiersListOnGrid = new List<Soldier>();
     public void CreateBuilding()
     {
         var placeIndicator = UIManager.Instance.GetPlacementIndicator();
-        if (placeIndicator.IsPlaceable)
-        {
-            Unit targetUnit = placeIndicator.SpecifiedUnit;
-            SetCellsNotEmptyForCoveredUnitArea(placeIndicator.GetLastPosition() , targetUnit.Width , targetUnit.Height);
-            UIManager.Instance.ClosePlacementIndicator();
-            Building createdUnit = buildingPool.GetObject(targetUnit.UniqueIDForType,targetUnit.gameObject, VectorUtils.GetWorldPositionFromCoordinates(placeIndicator.GetLastPosition()), buildingPool.transform);
-            createdUnit.gameObject.SetActive(true);
-            buildingListOnGrid.Add(createdUnit);
-            OnCreateBuilding.Throw();
-            EventCatcher<Soldier,Building,Vector2Int>.Catch(createdUnit.OnProduceSoldier, OnProduceSoldier);
-            EventCatcher<Unit>.Catch(createdUnit.OnDestroy, UnitDestroyed);
-        }
+        if (!placeIndicator.IsPlaceable)
+            return;
+        Unit targetUnit = placeIndicator.SpecifiedUnit;
+        SetCellsNotEmptyForCoveredUnitArea(placeIndicator.GetLastPosition() , targetUnit.Width , targetUnit.Height);
+        UIManager.Instance.ClosePlacementIndicator();
+        Building createdUnit = buildingPool.GetObject(
+            targetUnit.UniqueIDForType,
+            targetUnit.gameObject, 
+            VectorUtils.GetWorldPositionFromCoordinates(placeIndicator.GetLastPosition()),
+            buildingPool.transform);
+        createdUnit.gameObject.SetActive(true);
+        _buildingListOnGrid.Add(createdUnit);
+        OnCreateBuilding.Throw();
+        EventCatcher<Soldier,Building,Vector2Int>.Catch(createdUnit.OnProduceSoldier, OnProduceSoldier);
+        EventCatcher<Unit>.Catch(createdUnit.OnDestroy, UnitDestroyed);
     }
 
 
@@ -67,13 +70,13 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
      void EnqueueNeighbors(Vector2Int cell, Queue<Vector2Int> queue, HashSet<Vector2Int> visited) // Soldier Spawn point neighbors
      {
          List<Vector2Int> neighbors = new List<Vector2Int>();
-         for (int i = 0; i < GridUtils.Dirs.Count; i++)
+         for (int i = 0; i < GridUtils.Directions.Count; i++)
          {
-             neighbors.Add(cell + GridUtils.Dirs[i]);
+             neighbors.Add(cell + GridUtils.Directions[i]);
          }
          foreach (var neighbor in neighbors)
          {
-             if (generatedGrid.IsTargetCellValid(neighbor) && !visited.Contains(neighbor))
+             if (_generatedGrid.IsTargetCellValid(neighbor) && !visited.Contains(neighbor))
              {
                  queue.Enqueue(neighbor);
                  visited.Add(neighbor);
@@ -82,21 +85,21 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
      }
     private void OnProduceSoldier(Soldier soldier , Building fromBuild , Vector2Int targetPos)
     {
-        Vector2Int _targetPos = GetNearestEmptyCell(targetPos, soldier.Width, soldier.Height);
+        Vector2Int targetPosition = GetNearestEmptyCell(targetPos, soldier.Width, soldier.Height);
         Soldier createdSoldier =
-            soldierPool.GetObject(soldier.UniqueIDForType,soldier.gameObject,VectorUtils.GetWorldPositionFromCoordinates(_targetPos) , soldierPool.transform);
-        SetCellsNotEmptyForCoveredUnitArea(_targetPos , createdSoldier.Width , createdSoldier.Height);
+            soldierPool.GetObject(soldier.UniqueIDForType,soldier.gameObject,VectorUtils.GetWorldPositionFromCoordinates(targetPosition) , soldierPool.transform);
+        SetCellsNotEmptyForCoveredUnitArea(targetPosition , createdSoldier.Width , createdSoldier.Height);
         createdSoldier.gameObject.SetActive(true);
         EventCatcher<Unit>.Catch(createdSoldier.OnDestroy , UnitDestroyed);
         EventCatcher<Soldier>.Catch(createdSoldier.OnSoldierMovementStart , OnSoldierBeginMovement);
         EventCatcher<Soldier>.Catch(createdSoldier.OnSoldierMovementStop , OnSoldierStopMovement);
         EventCatcher<Soldier,Vector2Int , Action<bool>>.Catch(createdSoldier.StartMoveToNextCell ,CheckCellIsValidToMove);
-        soldiersListOnGrid.Add(createdSoldier);
+        _soldiersListOnGrid.Add(createdSoldier);
     }
     
     private void CheckCellIsValidToMove(Soldier soldier,Vector2Int coordinate , Action<bool> onComplete)
     {
-        onComplete?.Invoke(generatedGrid.IsTargetCellEmpty(coordinate));
+        onComplete?.Invoke(_generatedGrid.IsTargetCellEmpty(coordinate));
     }
     private void OnSoldierBeginMovement(Soldier soldier)
     {
@@ -117,7 +120,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
                 EventCatcher<Soldier,Building,Vector2Int>.ReleaseEvent(building.OnProduceSoldier ,OnProduceSoldier);
             }
             buildingPool.ReturnObject(building , building.UniqueIDForType);
-            buildingListOnGrid.Remove(building);
+            _buildingListOnGrid.Remove(building);
         }
         else if(destroyedUnit is Soldier soldier)
         {
@@ -125,7 +128,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
             EventCatcher<Soldier>.ReleaseEvent(soldier.OnSoldierMovementStop , OnSoldierStopMovement);
             EventCatcher<Soldier,Vector2Int , Action<bool>>.ReleaseEvent(soldier.StartMoveToNextCell ,CheckCellIsValidToMove);
             soldierPool.ReturnObject(soldier , soldier.UniqueIDForType);
-            soldiersListOnGrid.Remove(soldier);
+            _soldiersListOnGrid.Remove(soldier);
         }
         else
         {
@@ -162,7 +165,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
     }
     private IEnumerable<Unit> GetTotalUnitsOnGrid() // LIST SOLDERS + LIST BUILDINGS
     {
-        return buildingListOnGrid.Concat<Unit>(soldiersListOnGrid);
+        return _buildingListOnGrid.Concat<Unit>(_soldiersListOnGrid);
     }
     public void Initialize()
     {
@@ -174,7 +177,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
         {
             for (int j = 0; j < height; j++)
             {
-                generatedGrid.GetCellFromVector2Int(new Vector2Int(cellPosition.x + i, cellPosition.y + j))
+                _generatedGrid.GetCellFromVector2Int(new Vector2Int(cellPosition.x + i, cellPosition.y + j))
                     .IsEmptyCell = false;
             }
         }
@@ -186,7 +189,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
         {
             for (int j = 0; j < height; j++)
             {
-                generatedGrid.GetCellFromVector2Int(new Vector2Int(cellPosition.x + i, cellPosition.y + j))
+                _generatedGrid.GetCellFromVector2Int(new Vector2Int(cellPosition.x + i, cellPosition.y + j))
                     .IsEmptyCell = true;
             }
         }
@@ -199,12 +202,12 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
             for (int j = 0; j < height; j++)
             {
                 targetpos = new Vector2Int(cellPosition.x + i, cellPosition.y + j);
-                Cell targetcell = generatedGrid.GetCellFromVector2Int(targetpos);
-                if ( targetcell == null)
+                Cell targetCell = _generatedGrid.GetCellFromVector2Int(targetpos);
+                if ( targetCell == null)
                 {
                     return false;
                 }
-                if (targetcell.IsEmptyCell == false)
+                if (targetCell.IsEmptyCell == false)
                 {
                     return false;
                 }
@@ -212,11 +215,12 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
         }
         return true;
     }
-    public void GenerateGrid()
+
+    private void GenerateGrid()
     {
         int row = mapConfig.GridXSize;
         int column = mapConfig.GridYSize;
-        generatedGrid = new Grid(row, column);
+        _generatedGrid = new Grid(row, column);
         InputHandler.Instance.SetEdges(GeneratedGrid);
         for (int i = 0; i < row; i++)
         {

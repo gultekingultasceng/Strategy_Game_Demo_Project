@@ -8,35 +8,35 @@ using System;
 [RequireComponent(typeof(SoldierUISettings))]
 public class Soldier : Unit , IEnableDisable<Vector3>
 {
-    private SoldierUISettings soldierUISettings;
+    private SoldierUISettings _soldierUISettings;
     
-    public SoldierUISettings _SoldierUISettings
+    public SoldierUISettings SoldierUISettings
     {
         get
         {
-            if (soldierUISettings != null)
+            if (_soldierUISettings != null)
             {
-                return soldierUISettings;
+                return _soldierUISettings;
             }
             else
             {
-                soldierUISettings = GetComponent<SoldierUISettings>();
-                return soldierUISettings;
+                _soldierUISettings = GetComponent<SoldierUISettings>();
+                return _soldierUISettings;
             }
         }
     }
 
     #region Movement
     [SerializeField] private float movementSpeed;
-    public EventThrower<Soldier> OnSoldierMovementStart = new EventThrower<Soldier>();
-    public EventThrower<Soldier> OnSoldierMovementStop = new EventThrower<Soldier>();
-    public EventThrower<Soldier,Vector2Int,Action<bool>> StartMoveToNextCell = new EventThrower<Soldier,Vector2Int,Action<bool>>();
-    private Coroutine movementCoroutine;
-    private bool isNextTargetCellToMoveStillEmpty = true;
+    public readonly EventThrower<Soldier> OnSoldierMovementStart = new EventThrower<Soldier>();
+    public readonly EventThrower<Soldier> OnSoldierMovementStop = new EventThrower<Soldier>();
+    public readonly EventThrower<Soldier,Vector2Int,Action<bool>> StartMoveToNextCell = new EventThrower<Soldier,Vector2Int,Action<bool>>();
+    private Coroutine _movementCoroutine;
+    private bool _isNextTargetCellToMoveStillEmpty = true;
 
     public void SetNextCellMoveable(bool isAvailable)
     {
-        isNextTargetCellToMoveStillEmpty = isAvailable;
+        _isNextTargetCellToMoveStillEmpty = isAvailable;
     }
     public void Move(List<Cell> path , Unit targetUnit)
     {
@@ -58,9 +58,9 @@ public class Soldier : Unit , IEnableDisable<Vector3>
         }
         if (isTargetUnitExist)
         {
-            if (!isTargetUnitInMyAttackRange(targetUnit.MyPosition))
+            if (!IsTargetUnitInMyAttackRange(targetUnit.MyPosition))
             {
-                movementCoroutine =  StartCoroutine(Movevement(path , targetUnit));
+                _movementCoroutine =  StartCoroutine(Movement(path , targetUnit));
             }
             else
             {
@@ -69,16 +69,14 @@ public class Soldier : Unit , IEnableDisable<Vector3>
         }
         else
         {
-            movementCoroutine =  StartCoroutine(Movevement(path , targetUnit));
+            _movementCoroutine =  StartCoroutine(Movement(path , targetUnit));
         }
     }
-
-
-    bool isTargetUnitInMyAttackRange(Vector2Int target)
+    bool IsTargetUnitInMyAttackRange(Vector2Int target)
     {
         return Mathf.Abs(target.x - MyPosition.x) + Mathf.Abs(target.y - myPosition.y) <= attackRange;
     }
-    private IEnumerator Movevement(List<Cell> path , Unit targetUnit)
+    private IEnumerator Movement(List<Cell> path , Unit targetUnit)
     {
         OnSoldierMovementStart.Throw(this);
         for (int i = 0; i < path.Count; i++)
@@ -93,7 +91,7 @@ public class Soldier : Unit , IEnableDisable<Vector3>
             {
                 transform.position = Vector3.Lerp(startPos, targetWorldPos, (timer / estimatedTime));
                 timer += Time.deltaTime;
-                if (!isNextTargetCellToMoveStillEmpty)
+                if (!_isNextTargetCellToMoveStillEmpty)
                 {
                     StopMovement(); // IF LATER THE TARGET CELL FILLED, THEN STOP
                 }
@@ -111,26 +109,26 @@ public class Soldier : Unit , IEnableDisable<Vector3>
     private void StopMovement()
     {
         OnSoldierMovementStop.Throw(this);
-        if (movementCoroutine != null)
+        if (_movementCoroutine != null)
         {
-            StopCoroutine(movementCoroutine);
+            StopCoroutine(_movementCoroutine);
         }
-        movementCoroutine = null;
+        _movementCoroutine = null;
     }
     #endregion
     #region Attack
     [SerializeField] private int damagePoint;
     [SerializeField] [Range(1 , 5)] private float attackSpeed;
     [SerializeField][Range(0,3)] private int attackRange;
-    [SerializeField] private Unit targetUnitToAttack;
-    private Coroutine attackCoroutine;
+    private Unit _targetUnitToAttack;
+    private Coroutine _attackCoroutine;
     private IEnumerator Attack(Unit targetUnit)
     {
-        targetUnitToAttack = targetUnit;
-        while (targetUnitToAttack is {IsDestroyed: false}) // if targetUnit is not null and still exist
+        _targetUnitToAttack = targetUnit;
+        while (_targetUnitToAttack is {IsDestroyed: false}) // if targetUnit is not null and still exist
         {
-            targetUnitToAttack.UnderAttack(damagePoint);
-            if (targetUnitToAttack is {IsDestroyed: false})
+            _targetUnitToAttack.UnderAttack(damagePoint);
+            if (_targetUnitToAttack is {IsDestroyed: false})
             {
                 yield return new WaitForSeconds(1 / attackSpeed);
             }
@@ -140,24 +138,24 @@ public class Soldier : Unit , IEnableDisable<Vector3>
     private void AttackToUnit(Unit targetUnit)
     {
         StopAttack();
-        attackCoroutine = StartCoroutine(Attack(targetUnit));
+        _attackCoroutine = StartCoroutine(Attack(targetUnit));
     }
 
     private void StopAttack()
     {
-        if (attackCoroutine != null)
+        if (_attackCoroutine != null)
         {
-            StopCoroutine(attackCoroutine);
+            StopCoroutine(_attackCoroutine);
         }
-        targetUnitToAttack = null;
-        attackCoroutine = null;
+        _targetUnitToAttack = null;
+        _attackCoroutine = null;
     }
     #endregion
     public void PerformOnEnable(Vector3 parameter1)
     {
-        initialHealth = _UnitConfig.Health;
-        currentHealth = initialHealth;     // Get initial health from config
-        _SoldierUISettings.SetDefault();
+        InitialHealth = unitConfig.Health;
+        CurrentHealth = InitialHealth;
+        SoldierUISettings.SetDefault();
         MyPosition = VectorUtils.GetVector2Int(parameter1);
     }
     public void PerformDisable()

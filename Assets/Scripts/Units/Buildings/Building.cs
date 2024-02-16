@@ -11,85 +11,67 @@ using UnityEditor;
     public class Building : Unit , IEnableDisable<Vector3>
     {
         
-        private BuildingUISettings buildingUISettings;
+        private BuildingUISettings _buildingUISettings;
 
         [SerializeField] private ProduceSoldierBehaviour produceSoldierBehaviour;
         public bool CanProduceSoldier
         {
             get => produceSoldierBehaviour != null;
         }
-      //  private List<Soldier> producableList = new List<Soldier>();
-        
-        public EventThrower<Soldier, Building, Vector2Int> OnProduceSoldier =
+        public readonly EventThrower<Soldier, Building, Vector2Int> OnProduceSoldier =
             new EventThrower<Soldier, Building, Vector2Int>();
         
-        public List<Soldier> ProducableList
+        public List<Soldier> ProduceableList
         {
             get
             {
-                return produceSoldierBehaviour.producableList;
+                return produceSoldierBehaviour.ProduceableList;
             }
         }
-        public BuildingUISettings _BuildingUISettings
+        public BuildingUISettings BuildingUISettings
         {
             get
             {
-                if (buildingUISettings != null)
+                if (_buildingUISettings != null)
                 {
-                    return buildingUISettings;
+                    return _buildingUISettings;
                 }
                 else
                 {
-                    buildingUISettings = GetComponent<BuildingUISettings>();
-                    return buildingUISettings;
+                    _buildingUISettings = GetComponent<BuildingUISettings>();
+                    return _buildingUISettings;
                 }
             }
         }
-    
-        
-    
-        enum soldierSpawnDirection
-        {
-            up,
-            left,
-            right,
-            down
-        }
-        private soldierSpawnDirection soldierSpawnPoint;
-        private Vector2Int initialSoldierSpawnCoordinate;
-    
-        
+        private Vector2Int _initialSoldierSpawnCoordinate;
         public void CreateSoldier(Soldier targetSoldier)
         {
-            OnProduceSoldier.Throw(targetSoldier , this , initialSoldierSpawnCoordinate);
+            OnProduceSoldier.Throw(targetSoldier , this , _initialSoldierSpawnCoordinate);
         }
-        
-        public void SetInitialSpawnPoint()
+
+        private void SetInitialSpawnPoint()
         {
-            var targetdirection = produceSoldierBehaviour.spawnDirection;
-            initialSoldierSpawnCoordinate = targetdirection switch
+            var targetDirection = produceSoldierBehaviour.SpawnDirection;
+            _initialSoldierSpawnCoordinate = targetDirection switch
             {
-                ProduceSoldierBehaviour.soldierSpawnDirection.left => new Vector2Int(MyPosition.x - 1, MyPosition.y + Mathf.FloorToInt(0.5f *Height)),
-                ProduceSoldierBehaviour.soldierSpawnDirection.right => new Vector2Int(MyPosition.x + Width, MyPosition.y + Mathf.FloorToInt(0.5f *Height)),
-                ProduceSoldierBehaviour.soldierSpawnDirection.top => new Vector2Int(MyPosition.x + Mathf.FloorToInt(0.5f *Width), MyPosition.y + Height),
-                ProduceSoldierBehaviour.soldierSpawnDirection.bot => new Vector2Int(MyPosition.x + Mathf.FloorToInt(0.5f *Width), MyPosition.y - 1),
+                ProduceSoldierBehaviour.SoldierSpawnDirection.Left => new Vector2Int(MyPosition.x - 1, MyPosition.y + Mathf.FloorToInt(0.5f *Height)),
+                ProduceSoldierBehaviour.SoldierSpawnDirection.Right => new Vector2Int(MyPosition.x + Width, MyPosition.y + Mathf.FloorToInt(0.5f *Height)),
+                ProduceSoldierBehaviour.SoldierSpawnDirection.Top => new Vector2Int(MyPosition.x + Mathf.FloorToInt(0.5f *Width), MyPosition.y + Height),
+                ProduceSoldierBehaviour.SoldierSpawnDirection.Bot => new Vector2Int(MyPosition.x + Mathf.FloorToInt(0.5f *Width), MyPosition.y - 1),
                 _ => new Vector2Int(0, 0)
             };
-            
         }
-        
         public void PerformOnEnable(Vector3 parameter1)
         {
-            initialHealth = _UnitConfig.Health;
-            currentHealth = initialHealth;     // Get initial health from config
-            _BuildingUISettings.SetDefault();
+            InitialHealth = unitConfig.Health;
+            CurrentHealth = InitialHealth;
+            BuildingUISettings.SetDefault();
             MyPosition = VectorUtils.GetVector2Int(parameter1);
             if (CanProduceSoldier)
             {
                 SetInitialSpawnPoint();
             }
         }
-        
         public void PerformDisable()
         {
             this.gameObject.SetActive(false);

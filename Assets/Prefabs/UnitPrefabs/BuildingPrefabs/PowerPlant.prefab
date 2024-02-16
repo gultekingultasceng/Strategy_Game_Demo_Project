@@ -80,7 +80,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 2, y: 3}
+  m_Size: {x: 0.64, y: 0.96}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -114,7 +114,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uniqueIDForUnitType: 1
-  _UnitConfig: {fileID: 11400000, guid: 389957aac162c4cd6bc6cc7a21952dd6, type: 2}
+  unitConfig: {fileID: 11400000, guid: 389957aac162c4cd6bc6cc7a21952dd6, type: 2}
   width: 2
   height: 3
   produceSoldierBehaviour: {fileID: 0}

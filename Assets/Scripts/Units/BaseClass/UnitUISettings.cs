@@ -13,18 +13,8 @@ public class UnitUISettings : MonoBehaviour
             return unitIcon;
         }
     }
-    protected SpriteRenderer spriteRenderer;
-    public SpriteRenderer _SpriteRenderer
-    {
-        get
-        {
-            return spriteRenderer;
-        }
-        set
-        {
-            spriteRenderer = value;
-        }
-    }
+    protected SpriteRenderer SpriteRenderer;
+
     [SerializeField] private string unitDescription;
     public string UnitDescription
     {
@@ -41,14 +31,10 @@ public class UnitUISettings : MonoBehaviour
             return unitTitle;
         }
     }
-    private Color damagedColor, initialColor;
-
     public void SetDefault()
     {
-        _SpriteRenderer = GetComponent<SpriteRenderer>();
-        damagedColor = GameConsts.DamagedUnitColor;
-        initialColor = GameConsts.UnitInitialColor;
-        _SpriteRenderer.color = initialColor;
+        SpriteRenderer = GetComponent<SpriteRenderer>();
+        SpriteRenderer.color = GameConsts.UnitInitialColor;
     }
     public void GetDamageEffect()
     {
@@ -56,8 +42,8 @@ public class UnitUISettings : MonoBehaviour
     }
     IEnumerator DamageEffect(float delay = .05f)
     {
-        _SpriteRenderer.color = damagedColor;
+        SpriteRenderer.color = GameConsts.DamagedUnitColor;
         yield return new WaitForSeconds(delay);
-        _SpriteRenderer.color = initialColor;
+        SpriteRenderer.color = GameConsts.UnitInitialColor;
     }
 }

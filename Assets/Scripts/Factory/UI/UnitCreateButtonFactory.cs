@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class UnitCreateButtonFactory : Factory<UnitCreateButton , GameObject , Transform>
 {
-    public override UnitCreateButton Create(GameObject Button, Transform parent)
+    public override UnitCreateButton Create(GameObject button, Transform parent)
     {
-        return Instantiate(Button,parent).GetComponent<UnitCreateButton>();
+        return Instantiate(button,parent).GetComponent<UnitCreateButton>();
     }
 }

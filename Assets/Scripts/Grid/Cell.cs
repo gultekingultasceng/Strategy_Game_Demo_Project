@@ -26,7 +26,6 @@ public class Cell
         var dist = new Vector2Int(Mathf.Abs((int)myWorldPos.x - (int)otherWorldPos.x), Mathf.Abs((int)myWorldPos.y - (int)otherWorldPos.y));
         var lowest = Mathf.Min(dist.x, dist.y);
         var highest = Mathf.Max(dist.x, dist.y);
-
         var horizontalMovesRequired = highest - lowest;
         return lowest * 14 + horizontalMovesRequired * 10 ;
     }
@@ -35,52 +34,43 @@ public class Cell
         Neighbors = neighbors;
     }
     #endregion
-    private bool isEmptyCell;
-    public bool IsEmptyCell
-    {
-        get
-        {
-            return isEmptyCell;
-        }
-        set
-        {
-            isEmptyCell = value;
-        }
-    }
-    private int myRowOrder;
-    private int myColumnOrder;
+
+    public bool IsEmptyCell { get; set; }
+
+    private readonly int _myRowOrder;
+    private readonly int _myColumnOrder;
 
     public int MyRowOrder
     {
-        get => myRowOrder;
+        get => _myRowOrder;
     }
 
     public int MyColumnOrder
     {
-        get => myColumnOrder;
+        get => _myColumnOrder;
     }
 
-    private Vector3 myWorldPosition;
+    private Vector3 _myWorldPosition;
    
     public Cell(bool walkable , int row , int column)
     {
         IsEmptyCell = walkable;
-        myRowOrder = row;
-        myColumnOrder = column;
+        _myRowOrder = row;
+        _myColumnOrder = column;
         SetMyWorldPosition();
     }
 
     public void SetMyWorldPosition()
     {
-        myWorldPosition = new Vector3(myRowOrder, myColumnOrder, 0f);
+        _myWorldPosition = new Vector3(_myRowOrder, _myColumnOrder, 0f);
     }
     public Vector3 GetMyWorldPos()
     {
-        return myWorldPosition;
+        return _myWorldPosition;
     }
     public Vector2Int GetMyXYCoordinates()
     {
-        return new Vector2Int(myRowOrder, myColumnOrder);
+        return new Vector2Int(_myRowOrder, _myColumnOrder);
     }
 
  

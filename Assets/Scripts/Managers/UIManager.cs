@@ -23,7 +23,7 @@ public class UIManager : Singleton<UIManager>
 
     public void InformationPanelSet(Unit selectedUnit)
     {
-        if (selectedUnit != null)
+        if (selectedUnit)
         {
             informationUI.gameObject.SetActive(true);
             informationUI.SetInformationUI(selectedUnit);
