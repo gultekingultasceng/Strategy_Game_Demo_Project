@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Configs
+namespace SGD.Core.Configs
 {
     [CreateAssetMenu(fileName = "UnitConfig", menuName = "Configs/UnitConfig")]
     public class UnitConfig : ScriptableObject

@@ -1,19 +1,25 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using EventHandler;
-using ObjectPoolingSystem;
+using SGD.Core.Base;
+using SGD.Core.EventHandler;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Utilities;
-using Configs;
-public class MapGenerateManager : Singleton<MapGenerateManager>
+using SGD.Core.Utilities;
+using SGD.Core.Configs;
+using SGD.Core.Pathfinding;
+using Grid = SGD.Core.Pathfinding.Grid;
+using SGD.Core.Singleton;
+namespace SGD.Core.Managers
+{
+    public class MapGenerateManager : Singleton<MapGenerateManager>
 {
     [SerializeField] private MapConfig mapConfig; 
     [SerializeField] private Transform gridParent;
     [SerializeField] private BuildingPool buildingPool;
     [SerializeField] private SoldierPool soldierPool;
+    public readonly EventThrower OnCreateBuilding = new EventThrower();
+    private readonly List<Building> _buildingListOnGrid = new List<Building>();
+    private readonly List<Soldier> _soldiersListOnGrid = new List<Soldier>();
     private Grid _generatedGrid;
     public Grid GeneratedGrid {
         get
@@ -26,9 +32,7 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
         base.Awake();
     }
 
-    public readonly EventThrower OnCreateBuilding = new EventThrower();
-    private readonly List<Building> _buildingListOnGrid = new List<Building>();
-    private readonly List<Soldier> _soldiersListOnGrid = new List<Soldier>();
+
     public void CreateBuilding()
     {
         var placeIndicator = UIManager.Instance.GetPlacementIndicator();
@@ -230,4 +234,5 @@ public class MapGenerateManager : Singleton<MapGenerateManager>
             }
         }
     }
+}
 }

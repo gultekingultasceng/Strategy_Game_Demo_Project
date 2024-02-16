@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Serialization;
-
-public class InformationUI : MonoBehaviour
+using SGD.Core.Base;
+namespace SGD.Core.UI
+{
+    public class InformationUI : MonoBehaviour
 {
     [SerializeField] private GameObject produceableProductsPanel; 
     [SerializeField] private Image unitIconImage;
@@ -55,4 +53,6 @@ public class InformationUI : MonoBehaviour
         }
         
     }
+}
+
 }

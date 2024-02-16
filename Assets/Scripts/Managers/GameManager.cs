@@ -1,20 +1,20 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class GameManager : Singleton<GameManager>
+using SGD.Core.Singleton;
+namespace SGD.Core.Managers
 {
-    protected override void Awake()
+    public class GameManager : Singleton<GameManager>
     {
-        base.Awake();
-    }
+        protected override void Awake()
+        {
+            base.Awake();
+        }
     
-    private void Start()
-    {
-        InputHandler.Instance.Initialize();
-        MapGenerateManager.Instance.Initialize();
-        GameplayManager.Instance.Initialize();
-        UIManager.Instance.Initialize();
+        private void Start()
+        {
+            InputHandler.Instance.Initialize();
+            MapGenerateManager.Instance.Initialize();
+            GameplayManager.Instance.Initialize();
+            UIManager.Instance.Initialize();
+        }
     }
 }
+

@@ -1,12 +1,12 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using EventHandler;
+using SGD.Core.EventHandler;
+using SGD.Core.Behaviours;
+using SGD.Core.ObjectPooling;
 using UnityEngine;
-using UnityEngine.Timeline;
-using Utilities;
-using UnityEditor;
+using SGD.Core.Utilities;
 
+namespace SGD.Core.Base
+{
     [RequireComponent(typeof(BuildingUISettings))]
     public class Building : Unit , IEnableDisable<Vector3>
     {
@@ -81,3 +81,6 @@ using UnityEditor;
 
 
 
+}
+
+   

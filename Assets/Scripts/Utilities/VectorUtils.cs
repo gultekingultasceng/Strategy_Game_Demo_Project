@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace Utilities
+namespace SGD.Core.Utilities
 {
     public static class VectorUtils
     {

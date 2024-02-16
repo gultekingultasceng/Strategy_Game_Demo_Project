@@ -1,49 +1,52 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using ConstantsVariables;
-public class UnitUISettings : MonoBehaviour
-{
-    [SerializeField] protected Sprite unitIcon;
-    public Sprite UnitIcon
-    {
-        get
-        {
-            return unitIcon;
-        }
-    }
-    protected SpriteRenderer SpriteRenderer;
+using SGD.Core.Constants;
 
-    [SerializeField] private string unitDescription;
-    public string UnitDescription
+namespace SGD.Core.Base
+{
+    public class UnitUISettings : MonoBehaviour
     {
-        get
+        [SerializeField] protected Sprite unitIcon;
+        public Sprite UnitIcon
         {
-            return unitDescription;
+            get
+            {
+                return unitIcon;
+            }
         }
-    }
-    [SerializeField] private string unitTitle;
-    public string UnitTitle
-    {
-        get
+        protected SpriteRenderer SpriteRenderer;
+    
+        [SerializeField] private string unitDescription;
+        public string UnitDescription
         {
-            return unitTitle;
+            get
+            {
+                return unitDescription;
+            }
         }
-    }
-    public void SetDefault()
-    {
-        SpriteRenderer = GetComponent<SpriteRenderer>();
-        SpriteRenderer.color = GameConsts.UnitInitialColor;
-    }
-    public void GetDamageEffect()
-    {
-        StartCoroutine(DamageEffect());
-    }
-    IEnumerator DamageEffect(float delay = .05f)
-    {
-        SpriteRenderer.color = GameConsts.DamagedUnitColor;
-        yield return new WaitForSeconds(delay);
-        SpriteRenderer.color = GameConsts.UnitInitialColor;
+        [SerializeField] private string unitTitle;
+        public string UnitTitle
+        {
+            get
+            {
+                return unitTitle;
+            }
+        }
+        public void SetDefault()
+        {
+            SpriteRenderer = GetComponent<SpriteRenderer>();
+            SpriteRenderer.color = GameConstants.UnitInitialColor;
+        }
+        public void GetDamageEffect()
+        {
+            StartCoroutine(DamageEffect());
+        }
+        IEnumerator DamageEffect(float delay = .05f)
+        {
+            SpriteRenderer.color = GameConstants.DamagedUnitColor;
+            yield return new WaitForSeconds(delay);
+            SpriteRenderer.color = GameConstants.UnitInitialColor;
+        }
     }
 }
+

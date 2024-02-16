@@ -1,38 +1,42 @@
-using System.Collections;
-using System.Collections.Generic;
-using EventHandler;
+using SGD.Core.Base;
+using SGD.Core.ObjectPooling;
 using UnityEngine;
 using UnityEngine.UI;
-public class SoldierCreateButton : MonoBehaviour,IEnableDisable
+
+namespace SGD.Core.UI
 {
-    [SerializeField] private Image soldierICon;
-    private Button _myButton;
-    private Building _myBuilding;
-    private Soldier _mySoldier;
-    public void SetTheCreateButton(Building building,Soldier soldier)
+    public class SoldierCreateButton : MonoBehaviour,IEnableDisable
     {
-        soldierICon.sprite = soldier.SoldierUISettings.UnitIcon;
-        if (_myButton == null)
+        [SerializeField] private Image soldierICon;
+        private Button _myButton;
+        private Building _myBuilding;
+        private Soldier _mySoldier;
+        public void SetTheCreateButton(Building building,Soldier soldier)
         {
-            _myButton = GetComponent<Button>();
+            soldierICon.sprite = soldier.SoldierUISettings.UnitIcon;
+            if (_myButton == null)
+            {
+                _myButton = GetComponent<Button>();
+            }
+            _myButton.onClick.AddListener(OnCreateSoldierButtonClicked);
+            _myBuilding = building;
+            _mySoldier = soldier;
         }
-        _myButton.onClick.AddListener(OnCreateSoldierButtonClicked);
-        _myBuilding = building;
-        _mySoldier = soldier;
-    }
-    public void OnCreateSoldierButtonClicked()
-    {
-        _myBuilding.CreateSoldier(_mySoldier);
-    }
-    public void PerformOnEnable()
-    {
+        public void OnCreateSoldierButtonClicked()
+        {
+            _myBuilding.CreateSoldier(_mySoldier);
+        }
+        public void PerformOnEnable()
+        {
         
-    }
-    public void PerformOnDisable()
-    {
-        _myButton.onClick.RemoveListener(OnCreateSoldierButtonClicked);
-        _myBuilding = null;
-        _mySoldier = null;
-        this.gameObject.SetActive(false);
+        }
+        public void PerformOnDisable()
+        {
+            _myButton.onClick.RemoveListener(OnCreateSoldierButtonClicked);
+            _myBuilding = null;
+            _mySoldier = null;
+            this.gameObject.SetActive(false);
+        }
     }
 }
+

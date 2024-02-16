@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using SGD.Core.Factory;
 using UnityEngine;
 
-namespace ObjectPoolingSystem
+namespace SGD.Core.ObjectPooling
 {
     public interface IPool<T, TParameter1, TParameter2>
     {

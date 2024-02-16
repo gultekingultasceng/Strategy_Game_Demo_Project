@@ -1,9 +1,10 @@
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class InfiniteScrollVertical : MonoBehaviour, IBeginDragHandler, IDragHandler, IScrollHandler
+namespace SGD.Core.UI
+{
+    public class InfiniteScrollVertical : MonoBehaviour, IBeginDragHandler, IDragHandler, IScrollHandler
 {
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private GridLayoutGroup gridLayout;
@@ -113,3 +114,5 @@ public class InfiniteScrollVertical : MonoBehaviour, IBeginDragHandler, IDragHan
         return isReached;
     }
 }
+}
+

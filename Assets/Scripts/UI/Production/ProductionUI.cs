@@ -1,30 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
-using EventHandler;
 using UnityEngine;
-
-public class ProductionUI : MonoBehaviour
+using SGD.Core.Base;
+namespace SGD.Core.UI
 {
-    [SerializeField] private UnitCreateButton unitCreateButtonPrefab;
-    [SerializeField] private Unit[] produceableUnitList;
-    [SerializeField] private Transform contentProductsParent;
-    [SerializeField] private UnitCreateButtonPool unitCreateButtonPool;
-    [SerializeField] private InfiniteScrollVertical infiniteScrollView;
-    public void Initialize()
+    public class ProductionUI : MonoBehaviour
     {
-        FillProductsMenu();
-    }
-    private void FillProductsMenu()
-    {
-        int itemsCountToAddScrool = infiniteScrollView.GetRequiredItemCount();
-        for (int j = 0; j < itemsCountToAddScrool; j++)
+        [SerializeField] private UnitCreateButton unitCreateButtonPrefab;
+        [SerializeField] private Unit[] produceableUnitList;
+        [SerializeField] private Transform contentProductsParent;
+        [SerializeField] private UnitCreateButtonPool unitCreateButtonPool;
+        [SerializeField] private InfiniteScrollVertical infiniteScrollView;
+        public void Initialize()
         {
-            for (int i = 0; i < produceableUnitList.Length; i++)
-            {
-                UnitCreateButton button = unitCreateButtonPool.GetObject(unitCreateButtonPrefab.gameObject,contentProductsParent);
-                button.SetTheCreateButton(produceableUnitList[i]);
-            }
+            FillProductsMenu();
         }
-        infiniteScrollView.gameObject.SetActive(true);
+        private void FillProductsMenu()
+        {
+            int itemsCountToAddScrool = infiniteScrollView.GetRequiredItemCount();
+            for (int j = 0; j < itemsCountToAddScrool; j++)
+            {
+                for (int i = 0; i < produceableUnitList.Length; i++)
+                {
+                    UnitCreateButton button = unitCreateButtonPool.GetObject(unitCreateButtonPrefab.gameObject,contentProductsParent);
+                    button.SetTheCreateButton(produceableUnitList[i]);
+                }
+            }
+            infiniteScrollView.gameObject.SetActive(true);
+        }
     }
 }
+

@@ -1,10 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace ConstantsVariables
+namespace SGD.Core.Constants
 {
-    public static class GameConsts
+    public static class GameConstants
     {
         #region ColorConsts
         public static readonly Color DamagedUnitColor = new Color(1f, .2f, 0f);

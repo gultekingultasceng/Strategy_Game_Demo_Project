@@ -1,12 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Configs;
-using EventHandler;
+using SGD.Core.Configs;
+using SGD.Core.EventHandler;
 using UnityEngine;
-using Utilities;
 
-[RequireComponent(typeof(UnitUISettings))]
+namespace SGD.Core.Base
+{
+    [RequireComponent(typeof(UnitUISettings))]
 public class Unit : MonoBehaviour
 {
     [SerializeField] private int uniqueIDForUnitType = -1;
@@ -107,4 +105,6 @@ public class Unit : MonoBehaviour
         _isDestroyed = true;
         OnDestroy.Throw(this);
     }
+}
+
 }

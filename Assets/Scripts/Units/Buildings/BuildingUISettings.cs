@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class BuildingUISettings : UnitUISettings
+namespace SGD.Core.Base
 {
+    public class BuildingUISettings : UnitUISettings
+    {
     
+    }
 }
+

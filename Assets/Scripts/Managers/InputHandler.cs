@@ -1,11 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Utilities;
-using EventHandler;
-public class InputHandler : Singleton<InputHandler>
+using SGD.Core.Utilities;
+using SGD.Core.EventHandler;
+using Grid = SGD.Core.Pathfinding.Grid;
+using SGD.Core.Singleton;
+namespace SGD.Core.Managers
+{
+    public class InputHandler : Singleton<InputHandler>
 {
     public Camera mainCamera;
     private Vector2 _mousePosition;
@@ -81,5 +82,7 @@ public class InputHandler : Singleton<InputHandler>
                _mousePosition.y >= _yEdge.x && 
                _mousePosition.y <= _yEdge.y;
     }
+
+}
 
 }

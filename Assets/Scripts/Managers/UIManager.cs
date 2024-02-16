@@ -1,51 +1,55 @@
-using System.Collections;
-using System.Collections.Generic;
-using EventHandler;
+using SGD.Core.EventHandler;
 using UnityEngine;
-
-public class UIManager : Singleton<UIManager>
+using SGD.Core.Base;
+using SGD.Core.Singleton;
+using SGD.Core.UI;
+namespace SGD.Core.Managers
 {
+    public class UIManager : Singleton<UIManager>
+    {
+        
+        protected override void Awake()
+        {
+            base.Awake();
+        }
     
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
-    [SerializeField] private ProductionUI productionUI;
-    [SerializeField] private InformationUI informationUI;
-    [SerializeField] private PlacementIndicator placementIndicator;
-    public void Initialize()
-    {
-        EventCatcher<Unit>.Catch(GameplayManager.Instance.OnSelectUnit , InformationPanelSet);
-        productionUI.Initialize();
-        InformationPanelSet(null);
-    }
-
-    public void InformationPanelSet(Unit selectedUnit)
-    {
-        if (selectedUnit)
+        [SerializeField] private ProductionUI productionUI;
+        [SerializeField] private InformationUI informationUI;
+        [SerializeField] private PlacementIndicator placementIndicator;
+        public void Initialize()
         {
-            informationUI.gameObject.SetActive(true);
-            informationUI.SetInformationUI(selectedUnit);
+            EventCatcher<Unit>.Catch(GameplayManager.Instance.OnSelectUnit , InformationPanelSet);
+            productionUI.Initialize();
+            InformationPanelSet(null);
         }
-        else
+    
+        public void InformationPanelSet(Unit selectedUnit)
         {
-            informationUI.gameObject.SetActive(false);
+            if (selectedUnit)
+            {
+                informationUI.gameObject.SetActive(true);
+                informationUI.SetInformationUI(selectedUnit);
+            }
+            else
+            {
+                informationUI.gameObject.SetActive(false);
+            }
         }
-    }
-    public PlacementIndicator GetPlacementIndicator()
-    {
-        return placementIndicator;
-    }
-
-    public void ClosePlacementIndicator()
-    {
-        placementIndicator.gameObject.SetActive(false);
-    }
-    public void CreateUnitButtonClicked(Unit unit)
-    {
-        GameplayManager.Instance.ProductionStage();
-        placementIndicator.gameObject.SetActive(true);
-        placementIndicator.SetUnit(unit);
+        public PlacementIndicator GetPlacementIndicator()
+        {
+            return placementIndicator;
+        }
+    
+        public void ClosePlacementIndicator()
+        {
+            placementIndicator.gameObject.SetActive(false);
+        }
+        public void CreateUnitButtonClicked(Unit unit)
+        {
+            GameplayManager.Instance.ProductionStage();
+            placementIndicator.gameObject.SetActive(true);
+            placementIndicator.SetUnit(unit);
+        }
     }
 }
+

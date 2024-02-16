@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class SoldierUISettings : UnitUISettings
+namespace SGD.Core.Base
 {
+    public class SoldierUISettings : UnitUISettings
+    {
   
+    }
 }
+

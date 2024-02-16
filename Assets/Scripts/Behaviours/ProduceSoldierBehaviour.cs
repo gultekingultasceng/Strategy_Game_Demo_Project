@@ -1,19 +1,24 @@
-using System.Collections;
 using System.Collections.Generic;
+using SGD.Core.Base;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-[CreateAssetMenu(fileName = "ProduceSoldierBehaviour", menuName = "Behaviours/Buildings/ProduceSoldierBehaviour")]
-public class ProduceSoldierBehaviour : ScriptableObject
+
+
+namespace SGD.Core.Behaviours
 {
-    public List<Soldier> ProduceableList = new List<Soldier>();
-    [System.Serializable]
-    public enum SoldierSpawnDirection
+    [CreateAssetMenu(fileName = "ProduceSoldierBehaviour", menuName = "Behaviours/Buildings/ProduceSoldierBehaviour")]
+    public class ProduceSoldierBehaviour : ScriptableObject
     {
-        Left,
-        Right,
-        Top,
-        Bot
+        public List<Soldier> ProduceableList = new List<Soldier>();
+        [System.Serializable]
+        public enum SoldierSpawnDirection
+        {
+            Left,
+            Right,
+            Top,
+            Bot
+        }
+        public SoldierSpawnDirection SpawnDirection;
     }
-    public SoldierSpawnDirection SpawnDirection;
 }
+

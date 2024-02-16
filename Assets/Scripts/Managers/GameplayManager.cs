@@ -1,9 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using EventHandler;
+using SGD.Core.EventHandler;
+using SGD.Core.Pathfinding;
 using UnityEngine;
-
-public class GameplayManager : Singleton<GameplayManager>
+using SGD.Core.Singleton;
+using SGD.Core.Base;
+namespace SGD.Core.Managers
+{
+    public class GameplayManager : Singleton<GameplayManager>
 {
     protected override void Awake()
     {
@@ -96,8 +98,6 @@ public class GameplayManager : Singleton<GameplayManager>
            
         }
     }
-
-
- 
-   
 }
+}
+

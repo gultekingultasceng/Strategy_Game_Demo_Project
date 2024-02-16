@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using SGD.Core.Managers;
 using UnityEngine;
-    public static class PathFinder { 
+
+namespace SGD.Core.Pathfinding
+{
+     public static class PathFinder { 
     public static List<Cell> FindPath(Cell startCell, Cell targetCell) 
     {
         var toSearch = new List<Cell>() { startCell };
@@ -71,3 +75,5 @@ using UnityEngine;
         return Mathf.Abs(current.MyRowOrder - neighbor.MyRowOrder) + Mathf.Abs(current.MyColumnOrder - neighbor.MyColumnOrder) == 1;
     }
     }
+}
+   

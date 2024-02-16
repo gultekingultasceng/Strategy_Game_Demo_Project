@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using EventHandler;
-using ObjectPoolingSystem;
+using SGD.Core.EventHandler;
 using UnityEngine;
-using Utilities;
+using SGD.Core.Utilities;
 using System;
-[RequireComponent(typeof(SoldierUISettings))]
+using SGD.Core.ObjectPooling;
+using SGD.Core.Pathfinding;
+
+namespace SGD.Core.Base
+{
+    [RequireComponent(typeof(SoldierUISettings))]
 public class Soldier : Unit , IEnableDisable<Vector3>
 {
     private SoldierUISettings _soldierUISettings;
@@ -165,3 +169,5 @@ public class Soldier : Unit , IEnableDisable<Vector3>
         this.gameObject.SetActive(false);
     }
 }
+}
+

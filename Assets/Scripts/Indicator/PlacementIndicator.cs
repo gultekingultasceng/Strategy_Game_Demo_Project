@@ -1,66 +1,69 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using ConstantsVariables;
+using SGD.Core.Constants;
+using SGD.Core.Managers;
+using SGD.Core.Pathfinding;
 using UnityEngine;
 
-public class PlacementIndicator : MonoBehaviour
+namespace SGD.Core.Base
 {
-    private Unit _specifiedUnit;
-    private Cell _targetCell;
-    [SerializeField] private bool isPlaceable;
-
-    public Unit SpecifiedUnit
+    public class PlacementIndicator : MonoBehaviour
     {
-        get => _specifiedUnit;
-    }
-    public bool IsPlaceable
-    {
-        get => isPlaceable;
-    }
-    [SerializeField] private SpriteRenderer spriteRenderer;
-    public void SetUnit(Unit unit)
-    {
-        isPlaceable = false;
-        _targetCell = null;
-        spriteRenderer.sprite = unit.UnitUISettings.UnitIcon;
-        _specifiedUnit = unit;
-    }
-    public Vector2Int GetLastPosition()
-    {
-        if (_targetCell != null)
+        private Unit _specifiedUnit;
+        private Cell _targetCell;
+        [SerializeField] private bool isPlaceable;
+    
+        public Unit SpecifiedUnit
         {
-            if (isPlaceable)
+            get => _specifiedUnit;
+        }
+        public bool IsPlaceable
+        {
+            get => isPlaceable;
+        }
+        [SerializeField] private SpriteRenderer spriteRenderer;
+        public void SetUnit(Unit unit)
+        {
+            isPlaceable = false;
+            _targetCell = null;
+            spriteRenderer.sprite = unit.UnitUISettings.UnitIcon;
+            _specifiedUnit = unit;
+        }
+        public Vector2Int GetLastPosition()
+        {
+            if (_targetCell != null)
             {
-                return _targetCell.GetMyXYCoordinates();
+                if (isPlaceable)
+                {
+                    return _targetCell.GetMyXYCoordinates();
+                }
+                else
+                {
+                    return new Vector2Int(-1, -1);
+                }
             }
             else
             {
                 return new Vector2Int(-1, -1);
             }
         }
-        else
+        private void Update()
         {
-            return new Vector2Int(-1, -1);
-        }
-    }
-    private void Update()
-    {
-        if (_specifiedUnit)
-        {
-            spriteRenderer.color = isPlaceable ? GameConsts.PlacementFitColor : GameConsts.PlacementErrorColor;
-            _targetCell = MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(InputHandler.Instance.GetMouseButtonData());
-            if (_targetCell != null)
+            if (_specifiedUnit)
             {
-                transform.position = _targetCell.GetMyWorldPos();
-                isPlaceable = MapGenerateManager.Instance.IsCellBuildable(_targetCell.GetMyXYCoordinates() , _specifiedUnit.Width , _specifiedUnit.Height);
+                spriteRenderer.color = isPlaceable ? GameConstants.PlacementFitColor : GameConstants.PlacementErrorColor;
+                _targetCell = MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(InputHandler.Instance.GetMouseButtonData());
+                if (_targetCell != null)
+                {
+                    transform.position = _targetCell.GetMyWorldPos();
+                    isPlaceable = MapGenerateManager.Instance.IsCellBuildable(_targetCell.GetMyXYCoordinates() , _specifiedUnit.Width , _specifiedUnit.Height);
+                }
+                else
+                {
+                    isPlaceable = false;
+                    transform.position = InputHandler.Instance.MousePosition;
+                }
             }
-            else
-            {
-                isPlaceable = false;
-                transform.position = InputHandler.Instance.MousePosition;
-            }
+           
         }
-       
     }
 }
+

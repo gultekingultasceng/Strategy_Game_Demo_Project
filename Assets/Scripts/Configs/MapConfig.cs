@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-
-namespace Configs
+namespace SGD.Core.Configs
 {
     [CreateAssetMenu(fileName = "MapConfig", menuName = "Configs/MapConfig")]
     public class MapConfig : ScriptableObject
