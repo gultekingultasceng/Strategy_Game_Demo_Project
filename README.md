@@ -7,7 +7,6 @@ The game features a 2D strategy interface with a left panel for production and a
 
 **Implemented Features:**
 - [x] Factory Design Pattern
-- [x] Lightweight Design Pattern
 - [x] Object-Oriented Programming (OOP)
 - [x] Singleton Pattern
 - [x] Draw Call Optimization: Used sprite atlas
