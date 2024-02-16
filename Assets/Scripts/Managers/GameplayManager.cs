@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using SGD.Core.EventHandler;
 using SGD.Core.Pathfinding;
 using UnityEngine;
@@ -90,10 +91,20 @@ namespace SGD.Core.Managers
             {
                 Vector2Int nearestEmptyCellCoordinate =
                     MapGenerateManager.Instance.GetClosestCellAroundBuildingToSoldier(_rightClickTarget.MyPosition,_rightClickTarget.Width, _rightClickTarget.Height , soldier.MyPosition);
-                soldier.Move(PathFinder.FindPath(
+                List<Cell> pathToNearestEmptyCellCoordinate = PathFinder.FindPath(
                     MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(soldier.MyPosition),
                     MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(nearestEmptyCellCoordinate)
-                ) , _rightClickTarget);
+                );
+                if (pathToNearestEmptyCellCoordinate == null)
+                {
+                    nearestEmptyCellCoordinate =
+                        MapGenerateManager.Instance.GetNearestEmptyCell(coordinate,
+                            _rightClickTarget.Width, _rightClickTarget.Height);
+                    pathToNearestEmptyCellCoordinate = PathFinder.FindPath(
+                        MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(soldier.MyPosition),
+                        MapGenerateManager.Instance.GeneratedGrid.GetCellFromVector2Int(nearestEmptyCellCoordinate));
+                }
+                soldier.Move(pathToNearestEmptyCellCoordinate , _rightClickTarget);
             }
            
         }
