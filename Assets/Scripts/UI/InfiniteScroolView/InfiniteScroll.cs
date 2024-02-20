@@ -4,13 +4,12 @@ using UnityEngine.UI;
 
 namespace SGD.Core.UI
 {
-    public class InfiniteScrollVertical : MonoBehaviour, IBeginDragHandler, IDragHandler, IScrollHandler
+    public class InfiniteScroll : MonoBehaviour, IScrollHandler , IDragHandler , IBeginDragHandler
 {
     [SerializeField] private ScrollRect scrollRect;
     [SerializeField] private GridLayoutGroup gridLayout;
-
+    private Vector2 firstMousePosition;
     private RectTransform _rect;
-    private Vector2 _lastDragPosition;
     private bool _positiveDrag;
     private float _size;
    
@@ -34,28 +33,19 @@ namespace SGD.Core.UI
         _size = scrollType == ScrollType.Vertical ? _rect.rect.height : _rect.rect.width;
         _size = _rect.rect.height;
     }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        _lastDragPosition = eventData.position;
-    }
     public int GetRequiredItemCount()
     {
         return Mathf.CeilToInt((scrollRect.viewport.rect.height * 1.5f) / (gridLayout.spacing.y + gridLayout.cellSize.y));
     }
-    public void OnDrag(PointerEventData eventData)
-    {
-        _positiveDrag = scrollType == ScrollType.Vertical ? eventData.position.y > _lastDragPosition.y : eventData.position.x > _lastDragPosition.x;
-        _lastDragPosition = eventData.position;
-    }
-
     public void OnScroll(PointerEventData eventData)
     {
+        Debug.Log("scrolling : " + eventData.scrollDelta);
         _positiveDrag = scrollType == ScrollType.Vertical ? eventData.scrollDelta.y > 0 : eventData.scrollDelta.x > 0;
     }
 
     public void OnViewScroll(Vector2 _)
     {
+       
         int leftItemIndex = _positiveDrag ? scrollRect.content.childCount - 1 : 0;
         var leftItem = scrollRect.content.GetChild(leftItemIndex);
 
@@ -112,6 +102,26 @@ namespace SGD.Core.UI
                 item.position.x + gridLayout.cellSize.x < negThreshold;
         }
         return isReached;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        if (scrollType == ScrollType.Horizontal)
+        {
+            _positiveDrag = eventData.position.y > firstMousePosition.y;
+            firstMousePosition = eventData.position;
+        }
+        else
+        {
+            _positiveDrag = eventData.position.x > firstMousePosition.x;
+            firstMousePosition = eventData.position;
+
+        }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        firstMousePosition = eventData.position;
     }
 }
 }

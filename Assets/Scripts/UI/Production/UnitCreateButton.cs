@@ -13,6 +13,11 @@ namespace SGD.Core.UI
         [SerializeField] private TextMeshProUGUI unitSizeText;
         [SerializeField] private Image unitIconImage;
         private Unit _produceableUnit;
+
+        public Unit ProduceableUnit
+        {
+            get => _produceableUnit;
+        }
         private readonly EventThrower<Unit> _onCreateUnitButtonClicked = new EventThrower<Unit>();
         public void SetTheCreateButton(Unit unit)
         {
