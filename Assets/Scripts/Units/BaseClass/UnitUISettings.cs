@@ -4,7 +4,7 @@ using SGD.Core.Constants;
 
 namespace SGD.Core.Base
 {
-    public class UnitUISettings : MonoBehaviour
+    public abstract class UnitUISettings : MonoBehaviour
     {
         [SerializeField] protected Sprite unitIcon;
         public Sprite UnitIcon

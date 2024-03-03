@@ -3,10 +3,10 @@ using SGD.Core.EventHandler;
 using UnityEngine;
 
 namespace SGD.Core.Base
-{
+{ 
     [RequireComponent(typeof(UnitUISettings))]
-public class Unit : MonoBehaviour
-{
+    public abstract class Unit : MonoBehaviour
+    {   
     [SerializeField] private int uniqueIDForUnitType = -1;
     public int UniqueIDForType
     {
